@@ -24,7 +24,10 @@ export const metadata = pageMeta(pages.home);
 export default function HomePage() {
   return (
     <main id="main">
-      <section className="hero">
+      <section
+        className="hero"
+        style={{ ["--hero-visual" as string]: `url(${asset("/images/bg-network.webp")})` }}
+      >
         <div className="hero-grid" aria-hidden />
         <div className="shell relative grid grid-cols-12">
           <div className="col-span-12 lg:col-span-10">
@@ -84,23 +87,6 @@ export default function HomePage() {
                 </Link>
               </Card>
             ))}
-          </div>
-          <h3 className="mt-16">All 16 services</h3>
-          <div className="mt-4 grid md:grid-cols-2">
-            {practices.flatMap((group) =>
-              group.offerings.map((item) => (
-                <Link key={item.id} className="row-link" href={`/services/${group.slug}/#${item.id}`}>
-                  <span className="icon-tile">
-                    <Icon name={item.icon} />
-                  </span>
-                  <span>
-                    <strong className="block">{item.title}</strong>
-                    <span className="muted">{item.problem}</span>
-                  </span>
-                  <ArrowUpRight aria-hidden size={16} />
-                </Link>
-              )),
-            )}
           </div>
         </div>
       </section>

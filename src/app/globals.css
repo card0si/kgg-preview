@@ -44,10 +44,10 @@ h1,
 
 .display {
   font-weight: 700;
-  font-size: clamp(3.15rem, 6.5vw, 5.25rem);
-  line-height: 0.98;
+  font-size: clamp(48px, 7vw, 96px);
+  line-height: 0.96;
   letter-spacing: -0.045em;
-  max-width: 12em;
+  max-width: 14em;
 }
 
 h2 {
@@ -118,7 +118,7 @@ a {
 }
 
 .muted {
-  color: var(--color-text-2);
+  color: #d2d7de;
 }
 
 .faint {
@@ -330,7 +330,12 @@ a {
   align-items: center;
   padding-block: clamp(6rem, 16vh, 10rem);
   overflow: hidden;
-  background: var(--color-bg);
+  background-color: var(--color-bg);
+  background-image:
+    linear-gradient(180deg, rgba(10, 11, 13, 0.78), rgba(10, 11, 13, 0.92)),
+    var(--hero-visual);
+  background-size: cover;
+  background-position: center;
 }
 
 .hero-grid {
