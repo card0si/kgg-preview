@@ -1,0 +1,43 @@
+:root{
+  --color-bg:#0A0B0D;
+  --color-surface:#111317;
+  --color-surface-2:#171A1F;
+  --color-border:#23272E;
+  --color-border-strong:#323843;
+  --color-text:#F2F4F7;
+  --color-text-2:#A9B0BB;
+  --color-text-3:#7F8894;
+  --color-text-on-accent:#0A0B0D;
+  --color-accent:#C8D0DC;
+  --color-accent-deep:#102040;
+  --color-accent-mid:#2B4A7A;
+  --color-white:#FFFFFF;
+  --gradient-accent:linear-gradient(135deg,#102040 0%,#2B4A7A 55%,#C8D0DC 100%);
+  --font-display:'Cinzel', serif;
+  --font-sans:'Montserrat', system-ui, sans-serif;
+  --size-display:72px;
+  --size-h1:56px;
+  --size-h2:40px;
+  --size-h3:24px;
+  --size-lead:20px;
+  --size-body:17px;
+  --size-small:14px;
+  --size-eyebrow:12px;
+  --space-1:4px;
+  --space-2:8px;
+  --space-3:12px;
+  --space-4:16px;
+  --space-6:24px;
+  --space-8:32px;
+  --space-12:48px;
+  --space-16:64px;
+  --space-24:96px;
+  --space-32:128px;
+  --radius-sm:6px;
+  --radius-md:10px;
+  --radius-lg:16px;
+  --layout-max:1200px;
+  --layout-pad-x:80px;
+  --layout-pad-x-mobile:20px;
+}
+/* AA contrast (>=4.5:1) checked in tokens.json -> contrast. Accent = navy-steel family only. */
