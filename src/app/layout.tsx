@@ -1,19 +1,16 @@
 import type { Metadata, Viewport } from "next";
-import { Cinzel, Montserrat } from "next/font/google";
+import localFont from "next/font/local";
 import { Footer } from "@/components/footer";
 import { Header } from "@/components/header";
 import "./globals.css";
 
-const display = Cinzel({
-  subsets: ["latin"],
-  weight: ["600", "700"],
-  variable: "--font-display-loaded",
-  display: "swap",
-});
-
-const sans = Montserrat({
-  subsets: ["latin"],
-  weight: ["400", "500", "600"],
+const sans = localFont({
+  src: [
+    { path: "../fonts/Inter-Regular.ttf", weight: "400", style: "normal" },
+    { path: "../fonts/Inter-Medium.ttf", weight: "500", style: "normal" },
+    { path: "../fonts/Inter-SemiBold.ttf", weight: "600", style: "normal" },
+    { path: "../fonts/Inter-Bold.ttf", weight: "700", style: "normal" },
+  ],
   variable: "--font-sans-loaded",
   display: "swap",
 });
@@ -34,7 +31,7 @@ export const viewport: Viewport = {
 
 export default function RootLayout({ children }: LayoutProps<"/">) {
   return (
-    <html lang="en" className={`${display.variable} ${sans.variable}`}>
+    <html lang="en" className={sans.variable}>
       <head>
         <meta name="robots" content="noindex,nofollow" />
       </head>

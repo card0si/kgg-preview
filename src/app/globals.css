@@ -2,7 +2,7 @@
 @import "../theme/tokens.css";
 
 @theme inline {
-  --font-sans: var(--font-sans-loaded), "Montserrat", system-ui, sans-serif;
+  --font-sans: var(--font-sans-loaded), "Inter", system-ui, sans-serif;
 }
 
 html {
@@ -25,35 +25,40 @@ body.menu-open {
 }
 
 h1,
+h2,
+h3,
 .h1 {
-  font-family: var(--font-display-loaded), var(--font-display);
+  font-family: var(--font-sans-loaded), var(--font-sans);
   font-weight: 600;
+  letter-spacing: -0.03em;
+  text-transform: none;
+}
+
+h1,
+.h1 {
   font-size: clamp(2.15rem, 4vw, var(--size-h1));
   line-height: 1.08;
-  letter-spacing: -0.025em;
   margin: 0;
-  max-width: 22ch;
+  max-width: 18em;
 }
 
 .display {
-  font-size: clamp(2.6rem, 5.2vw, var(--size-display));
-  max-width: 15ch;
+  font-weight: 700;
+  font-size: clamp(3.15rem, 6.5vw, 5.25rem);
+  line-height: 0.98;
+  letter-spacing: -0.045em;
+  max-width: 12em;
 }
 
 h2 {
-  font-family: var(--font-sans-loaded), var(--font-sans);
-  font-weight: 600;
   font-size: clamp(1.7rem, 2.6vw, var(--size-h2));
   line-height: 1.15;
-  letter-spacing: -0.02em;
   margin: 0;
 }
 
 h3 {
   font-size: var(--size-h3);
   line-height: 1.25;
-  font-weight: 600;
-  letter-spacing: -0.015em;
   margin: 0;
 }
 
@@ -322,9 +327,10 @@ a {
 .hero {
   min-height: calc(100svh - 4.5rem);
   display: flex;
-  align-items: flex-end;
-  padding-block: var(--space-16) var(--space-16);
+  align-items: center;
+  padding-block: clamp(6rem, 16vh, 10rem);
   overflow: hidden;
+  background: var(--color-bg);
 }
 
 .hero-grid {

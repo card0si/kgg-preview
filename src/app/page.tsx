@@ -149,7 +149,7 @@ export default function HomePage() {
           <ol className="mt-10 grid list-none grid-cols-12 gap-6 p-0">
             {homeSteps.map((step) => (
               <li key={step.n} className="col-span-12 border-t border-[var(--color-border)] pt-5 sm:col-span-6 xl:col-span-3">
-                <span className="faint font-[family-name:var(--font-display-loaded),var(--font-display)] text-3xl">{step.n}</span>
+                <span className="faint text-3xl font-semibold tracking-tight">{step.n}</span>
                 <strong className="mt-3 block">{step.title}</strong>
                 <span className="muted">{step.text}</span>
               </li>

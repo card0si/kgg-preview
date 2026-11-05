@@ -17,9 +17,9 @@ export function Rise({
   return (
     <motion.div
       className={className}
-      initial={{ y: 10 }}
+      initial={{ y: 12 }}
       animate={{ y: 0 }}
-      transition={{ duration: 0.55, ease: [0.22, 1, 0.36, 1], delay }}
+      transition={{ duration: 0.7, ease: [0.22, 1, 0.36, 1], delay }}
     >
       {children}
     </motion.div>

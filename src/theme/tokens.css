@@ -13,8 +13,8 @@
   --color-accent-mid:#2B4A7A;
   --color-white:#FFFFFF;
   --gradient-accent:linear-gradient(135deg,#102040 0%,#2B4A7A 55%,#C8D0DC 100%);
-  --font-display:'Cinzel', serif;
-  --font-sans:'Montserrat', system-ui, sans-serif;
+  --font-display:"Inter", system-ui, sans-serif;
+  --font-sans:"Inter", system-ui, sans-serif;
   --size-display:72px;
   --size-h1:56px;
   --size-h2:40px;
