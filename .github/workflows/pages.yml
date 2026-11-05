@@ -1,0 +1,17 @@
+# Present for review only. This workflow has no push or pull_request trigger,
+# and the job is disabled so a manual dispatch does not deploy.
+name: pages
+
+on:
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+jobs:
+  deploy:
+    if: false
+    runs-on: ubuntu-latest
+    steps:
+      - name: Disabled
+        run: echo "Pages deploy is not enabled in this pull request."
