@@ -7,8 +7,8 @@ A static site, ready for GitHub Pages: plain HTML, one CSS file, one small JS fi
 | Page | Path |
 |---|---|
 | Home | `index.html` |
-| Defense Solutions | `defense/` |
-| Digital & AI Transformation | `digital-ai/` |
+| AI & Automation | `ai-automation/` |
+| Digital Transformation | `digital-transformation/` |
 | Forward Engineering | `forward-engineering/` |
 | Ventures | `ventures/` |
 | About | `about/` |
@@ -16,6 +16,14 @@ A static site, ready for GitHub Pages: plain HTML, one CSS file, one small JS fi
 | Privacy, Terms, 404 | `privacy/`, `terms/`, `404.html` |
 
 Shared files are in `assets/`. Styles are in `assets/css/site.css`, behavior is in `assets/js/site.js`, the Archivo variable font and the Cinzel wordmark font are in `assets/fonts/`, and imagery from V1 is in `assets/img/`.
+
+## Positioning
+
+Kenton Global Group is the umbrella company, positioned as a broad AI and digital transformation firm. Its three areas are AI & Automation, Digital Transformation and Forward Engineering. Ventures is where new brands live. Defense work will go on a separate Kenton Defense site later.
+
+## Offices
+
+The homepage and About page show Cincinnati and Charleston as two illustrated buildings: `assets/img/office-cincinnati.svg` and `assets/img/office-charleston.svg`. These are stylized drawings, not photos of real buildings, and no addresses are listed.
 
 ## Design system
 
@@ -38,4 +46,4 @@ Shared files are in `assets/`. Styles are in `assets/css/site.css`, behavior is 
 - [ ] **Contact details:** an email or phone number could be added to the contact page and footer. V1 only had placeholders, so none are shown.
 - [ ] **Legal review:** Privacy and Terms are marked as drafts.
 - [ ] **Ventures:** Contrackr is listed as "In development". Add new ventures by copying the `.venture` block in `ventures/index.html`.
-- [ ] **Imagery:** the photos are reused from V1. Real defense imagery (your own product or field photos) would make the Defense page stronger.
+- [ ] **Charleston:** confirm the state (SC or WV) if you want it shown next to the city name.

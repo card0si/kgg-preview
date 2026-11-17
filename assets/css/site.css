@@ -188,6 +188,14 @@ p{margin:0 0 1em;max-width:64ch}
 .status::before{content:"";width:8px;height:8px;border-radius:50%;background:var(--signal);box-shadow:0 0 0 4px rgba(111,168,255,.18)}
 @media (max-width:900px){.venture{grid-template-columns:1fr}.venture .vimg{min-height:240px}}
 
+/* Offices: two illustrated buildings */
+.offices{display:grid;grid-template-columns:1fr 1fr;gap:clamp(20px,3vw,40px)}
+.office{margin:0}
+.office img{width:100%;height:auto;border:1px solid var(--line);--c:22px;clip-path:polygon(0 0,calc(100% - var(--c)) 0,100% var(--c),100% 100%,0 100%)}
+.office figcaption{display:flex;align-items:baseline;justify-content:space-between;gap:16px;padding-top:22px;border-top:2px solid var(--signal);margin-top:18px;width:100%}
+.office h3{font-size:clamp(26px,2.6vw,38px)}
+@media (max-width:760px){.offices{grid-template-columns:1fr}}
+
 /* CTA */
 .cta{text-align:left}
 .cta h2{max-width:16ch}
