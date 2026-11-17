@@ -46,7 +46,7 @@ Steidle Fabricating appears on the homepage and About page, using its logo (`ass
 
 ## Design system
 
-- **Palette:** Abyss `#081226` (base), Navy `#102040` (brand), Panel `#0E1C3A`, Steel `#C8D0DC` (secondary text), Ice `#EEF2F7` (primary text), Signal `#6FA8FF` (used only for lines, focus and active states).
+- **Palette:** Evergreen `#0B1A16` (base), Pine `#163229`, Panel `#11241F`, Sage `#B9C2B8` (secondary text), Bone `#EEECE4` (primary text), Brass `#D2AE6D` (used only for lines, focus and active states). Photos use an evergreen-to-bone duotone so they match the palette.
 - **Type:** Archivo variable throughout. Headlines are set at 112% width and body text at normal width. Cinzel appears only in the KENTON wordmark.
 - **Signature element:** the homepage domain selector. Three full-height panels widen on hover or focus. On mobile they stack.
 - **Details:** buttons have chamfered corners. Motion is limited to the hero load sequence and user-triggered changes, and it respects `prefers-reduced-motion`.
