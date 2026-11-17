@@ -31,6 +31,19 @@ The building photos are free stock images from Unsplash. They are free for comme
 
 Both photos are cropped to 4:5 and given a light navy color grade to match the site.
 
+## Contrackr logo
+
+The logo files are in `assets/img/contrackr/`:
+- `contrackr-logo.svg` for dark backgrounds
+- `contrackr-logo-light.svg` for white backgrounds
+- `contrackr-icon.svg` as the app icon or favicon
+
+The mark is a tracking arc with a data feed running through it to a live node. The wordmark is Archivo Bold Expanded, converted to outlines, so it needs no font to display.
+
+## Clients
+
+Steidle Fabricating appears on the homepage and About page, using its logo (`assets/img/clients/steidle-logo.svg`) and a link to steidlefab.com.
+
 ## Design system
 
 - **Palette:** Abyss `#081226` (base), Navy `#102040` (brand), Panel `#0E1C3A`, Steel `#C8D0DC` (secondary text), Ice `#EEF2F7` (primary text), Signal `#6FA8FF` (used only for lines, focus and active states).
@@ -52,4 +65,5 @@ Both photos are cropped to 4:5 and given a light navy color grade to match the s
 - [ ] **Contact details:** an email or phone number could be added to the contact page and footer. V1 only had placeholders, so none are shown.
 - [ ] **Legal review:** Privacy and Terms are marked as drafts.
 - [ ] **Ventures:** Contrackr is listed as "In development". Add new ventures by copying the `.venture` block in `ventures/index.html`.
+- [ ] **Steidle:** confirm Steidle is fine with being named as a client and with the wording.
 - [ ] **Office photos:** replace the stock photos with real photos of your offices when available.

@@ -186,7 +186,23 @@ p{margin:0 0 1em;max-width:64ch}
 .venture h3{margin-bottom:14px}
 .status{display:inline-flex;align-items:center;gap:9px;font-size:14px;color:var(--ice);margin-bottom:22px}
 .status::before{content:"";width:8px;height:8px;border-radius:50%;background:var(--signal);box-shadow:0 0 0 4px rgba(111,168,255,.18)}
+/* Brand panel: a logo over a dimmed image and an engineering grid */
+.venture .vimg.brand{display:flex;align-items:center;justify-content:center;padding:48px;background:var(--abyss);isolation:isolate}
+.venture .vimg.brand .bg{opacity:.35;z-index:-2}
+.venture .vimg.brand::before{content:"";position:absolute;inset:0;z-index:-1;background:
+  linear-gradient(rgba(111,168,255,.07) 1px,transparent 1px) 0 0/32px 32px,
+  linear-gradient(90deg,rgba(111,168,255,.07) 1px,transparent 1px) 0 0/32px 32px,
+  radial-gradient(ellipse at center,rgba(8,18,38,.2),rgba(8,18,38,.85) 75%)}
+.venture .vimg.brand .mark-logo{position:relative;width:min(78%,420px);height:auto}
+.venture .vimg.client{background:#0B1530}
+.venture .vimg.client::before{background:radial-gradient(ellipse at center,rgba(111,168,255,.10),transparent 70%)}
+.spec{margin:26px 0 0;border-top:1px solid var(--line)}
+.spec div{display:grid;grid-template-columns:minmax(0,.8fr) minmax(0,1.6fr);gap:20px;padding:16px 0;border-bottom:1px solid var(--line)}
+.spec dt{color:var(--ice);font-weight:600;font-size:16px;font-stretch:106%}
+.spec dd{margin:0;font-size:15.5px}
+.sources{margin:20px 0 0;font-size:14.5px;color:var(--muted)}
 @media (max-width:900px){.venture{grid-template-columns:1fr}.venture .vimg{min-height:240px}}
+@media (max-width:560px){.spec div{grid-template-columns:1fr;gap:4px}}
 
 /* Offices: two illustrated buildings */
 .offices{display:grid;grid-template-columns:1fr 1fr;gap:clamp(20px,3vw,40px)}
