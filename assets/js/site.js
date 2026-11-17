@@ -19,6 +19,27 @@
     });
   }
 
+  // Fit the hero and the domain cards on the first screen (desktop). If the cards would
+  // end below the fold, shrink the brand title step by step until they fit.
+  var hero = document.querySelector('.hero'), doms = document.querySelector('.domains');
+  var brand = hero && hero.querySelector('.brandname');
+  function fit() {
+    if (!hero || !doms || !brand) return;
+    brand.style.fontSize = '';
+    if (window.innerWidth < 901) return;
+    var base = parseFloat(getComputedStyle(brand).fontSize), size = base;
+    for (var i = 0; i < 12; i++) {
+      var over = doms.getBoundingClientRect().bottom + window.scrollY - window.innerHeight;
+      if (over <= 0 || size <= 40) break;
+      size = Math.max(40, size - Math.max(4, over / 2.2));
+      brand.style.fontSize = size + 'px';
+    }
+  }
+  fit();
+  window.addEventListener('resize', fit);
+  window.addEventListener('load', fit);
+  if (document.fonts && document.fonts.ready) document.fonts.ready.then(fit);
+
   // Domain selector: the first panel starts open so the row never looks collapsed
   var domains = document.querySelectorAll('.domain');
   if (domains.length) {
