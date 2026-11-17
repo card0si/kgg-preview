@@ -371,6 +371,26 @@ p{margin:0 0 1em;max-width:64ch}
 .legal h2{font-size:clamp(24px,2.4vw,32px);margin:56px 0 16px}
 .legal h2:first-child{margin-top:0}
 
+/* ---------- Light sections: dark text on soft white for long reading ---------- */
+.sec.light{background:#F4F6F8;color:#3A4A60;
+  --ice:#0B1630; --steel:#3A4A60; --muted:#5E6B7E; --line:rgba(16,32,64,.14); --signal:#1F5FD1}
+.sec.light + .sec.light{background:#fff}
+.light ::selection{background:#1F5FD1;color:#fff}
+.light .btn{background:#102040;color:#fff}
+.light .btn:hover{background:#0B1630}
+.light .btn.line{background:transparent;color:#102040;box-shadow:inset 0 0 0 1px rgba(16,32,64,.45)}
+.light .btn.line:hover{background:rgba(16,32,64,.06)}
+.light .venture{background:#fff;border-color:rgba(16,32,64,.14);box-shadow:0 1px 0 rgba(16,32,64,.04),0 24px 48px -32px rgba(16,32,64,.35)}
+.light .venture .vimg.brand{--ice:#EEF2F7}
+.light .flip-btn{color:#102040;box-shadow:inset 0 0 0 1px rgba(16,32,64,.35)}
+.light .flip-btn:hover{background:rgba(16,32,64,.06)}
+.light .form input,.light .form select,.light .form textarea{background:#fff;color:#0B1630;border-color:rgba(16,32,64,.25)}
+.light .form select option{background:#fff}
+.light .form .err{color:#B42318}
+.light .form [aria-invalid=true]{border-color:#D92D20}
+.light .status::before{box-shadow:0 0 0 4px rgba(31,95,209,.15)}
+.light .scenario p{color:#0B1630}
+
 /* ---------- Footer ---------- */
 .ftr{background:#060E1E;border-top:1px solid var(--line);padding:clamp(64px,8vw,104px) 0 36px;font-size:15.5px}
 .fgrid{display:grid;grid-template-columns:1.4fr repeat(3,1fr);gap:40px}
@@ -389,6 +409,35 @@ p{margin:0 0 1em;max-width:64ch}
 .nf .wrap{display:grid;grid-template-columns:1.2fr 1fr;gap:56px;align-items:center;padding-top:var(--hh)}
 .nf img{width:100%;max-width:440px;-webkit-mask-image:radial-gradient(circle,#000 42%,transparent 70%);mask-image:radial-gradient(circle,#000 42%,transparent 70%)}
 @media (max-width:800px){.nf .wrap{grid-template-columns:1fr}.nf img{max-width:260px}}
+
+/* ---------- Mobile ---------- */
+@media (max-width:760px){
+  :root{--sy:60px}
+  .phero{min-height:0}
+  .phero .wrap{padding-top:calc(var(--hh) + 48px);padding-bottom:40px}
+  .phero h1{font-size:clamp(36px,10vw,48px)}
+  .head{margin-bottom:32px;gap:16px}
+  .statement{font-size:26px}
+  .cap{padding:28px 0;gap:14px}
+  .cap h3{font-size:22px}
+  .office img{aspect-ratio:4/3}
+  .office figcaption{margin-top:12px;padding-top:14px}
+  .venture .vimg{min-height:200px}
+  .venture .vtxt{padding:24px 20px}
+  .seq li::before{margin-bottom:10px}
+  .trace{display:none}
+  .faq summary{font-size:18px;padding:20px 40px 20px 0}
+  .fgrid{gap:28px}
+  .ftr .fbar{margin-top:40px}
+  .cta h2{font-size:32px}
+  .cta .lede{font-size:18px}
+  /* touch screens: no 3D flip, a quick crossfade instead */
+  .flip-card.is-leaving{animation:fadeOut .2s forwards}
+  .flip-card.is-entering{animation:fadeIn .3s .1s both}
+  .flip-tab span{font-size:18px}
+  .form .btn{width:100%;justify-content:center}
+}
+@media (hover:none){.domain img{transform:none}}
 
 @media (prefers-reduced-motion:reduce){
   *,*::before,*::after{animation-duration:.01ms!important;animation-delay:0s!important;transition-duration:.01ms!important;scroll-behavior:auto!important}

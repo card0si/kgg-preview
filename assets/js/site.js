@@ -3,7 +3,8 @@
   var burger = document.querySelector('.burger');
 
   // Header turns solid once the page scrolls past the top
-  function onScroll() { hdr.classList.toggle('solid', window.scrollY > 24); }
+  var hasHero = !!document.querySelector('.hero,.phero');
+  function onScroll() { hdr.classList.toggle('solid', !hasHero || window.scrollY > 24); }
   onScroll();
   window.addEventListener('scroll', onScroll, { passive: true });
 
