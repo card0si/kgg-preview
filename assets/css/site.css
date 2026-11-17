@@ -141,6 +141,24 @@ p{margin:0 0 1em;max-width:64ch}
   .domain::after{transform:scaleX(1);width:56px}
 }
 
+/* Desktop: hero and the domain cards share the first screen */
+@media (min-width:901px){
+  :root{--dom-h:clamp(240px,33vh,330px)}
+  .hero{min-height:calc(100vh - var(--dom-h));min-height:calc(100svh - var(--dom-h))}
+  .hero .wrap{padding-top:calc(var(--hh) + 20px);padding-bottom:clamp(24px,3.6vh,44px)}
+  .hero h1.brandname{font-size:clamp(54px,min(8.2vw,13vh),132px)}
+  .hero .tag{margin-top:clamp(12px,2vh,22px);font-size:clamp(20px,min(2vw,3.4vh),30px)}
+  .hero .lede{font-size:clamp(17px,min(1.4vw,2.4vh),21px)}
+  .hero .ctas{margin-top:clamp(16px,2.6vh,28px)}
+  .domains{height:var(--dom-h);min-height:0}
+  .domain{padding:clamp(18px,2.2vw,32px)}
+  .domain h3{font-size:clamp(22px,min(1.9vw,3.6vh),30px)}
+  .domain p{font-size:15.5px;margin-top:8px}
+  .domain ul{margin-top:10px;font-size:14px}
+  .domain .go{margin-top:12px;font-size:14.5px}
+}
+@media (min-width:901px) and (max-height:760px){.domain ul{display:none}}
+
 /* ---------- Sections ---------- */
 .sec{padding:var(--sy) 0;position:relative}
 .sec.panel{background:var(--panel)}
