@@ -38,7 +38,7 @@ The logo files are in `assets/img/contrackr/`:
 - `contrackr-logo-light.svg` for white backgrounds
 - `contrackr-icon.svg` as the app icon or favicon
 
-The mark is a tracking arc with a data feed running through it to a live node. The wordmark is Archivo Bold Expanded, converted to outlines, so it needs no font to display.
+Contrackr has its own brand colors, separate from KGG: Graphite `#0E0F12`, Plate `#1A1C21`, Amber `#FFB224` and Off-white `#F5F4F0`. The mark is a tracking arc with a data feed running through it to a live node. The wordmark is Archivo Bold Expanded, converted to outlines, so it needs no font to display.
 
 ## Clients
 
@@ -46,7 +46,7 @@ On the homepage, Steidle Fabricating and Contrackr share one "Clients and ventur
 
 ## Design system
 
-- **Palette:** Evergreen `#0B1A16` (base), Pine `#163229`, Panel `#11241F`, Sage `#B9C2B8` (secondary text), Bone `#EEECE4` (primary text), Brass `#D2AE6D` (used only for lines, focus and active states). Photos use an evergreen-to-bone duotone so they match the palette.
+- **Palette:** Abyss `#081226` (base), Navy `#102040` (brand), Panel `#0E1C3A`, Steel `#C8D0DC` (secondary text), Ice `#EEF2F7` (primary text), Signal `#6FA8FF` (used only for lines, focus and active states).
 - **Type:** Archivo variable throughout. Headlines are set at 112% width and body text at normal width. Cinzel appears only in the KENTON wordmark.
 - **Signature element:** the homepage domain selector. Three full-height panels widen on hover or focus. On mobile they stack.
 - **Details:** buttons have chamfered corners. Motion is limited to the hero load sequence and user-triggered changes, and it respects `prefers-reduced-motion`.
