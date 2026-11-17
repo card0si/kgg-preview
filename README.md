@@ -42,7 +42,7 @@ The mark is a tracking arc with a data feed running through it to a live node. T
 
 ## Clients
 
-Steidle Fabricating appears on the homepage and About page, using its logo (`assets/img/clients/steidle-logo.svg`) and a link to steidlefab.com.
+On the homepage, Steidle Fabricating and Contrackr share one "Clients and ventures" section. The cards flip between each other with tabs, arrow buttons, arrow keys and an 8-second auto-advance that pauses when you hover or focus. Add a card by adding an entry to the list in the section. Steidle also appears on the About page, using its logo (`assets/img/clients/steidle-logo.svg`) and a link to steidlefab.com.
 
 ## Design system
 

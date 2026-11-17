@@ -214,6 +214,49 @@ p{margin:0 0 1em;max-width:64ch}
 .office img{aspect-ratio:4/5;object-fit:cover}
 @media (max-width:760px){.offices{grid-template-columns:1fr}}
 
+/* Clients and ventures: cards that flip between each other */
+.flip-bar{display:flex;align-items:flex-end;justify-content:space-between;gap:24px;margin-bottom:28px;border-bottom:1px solid var(--line)}
+.flip-tabs{display:flex;gap:clamp(20px,4vw,48px)}
+.flip-tab{position:relative;background:none;border:0;padding:0 0 18px;cursor:pointer;text-align:left;font:inherit;color:var(--muted);transition:color .3s}
+.flip-tab small{display:block;font-size:13.5px;margin-bottom:4px;color:var(--muted)}
+.flip-tab span{display:block;font-size:clamp(19px,1.8vw,24px);font-weight:600;font-stretch:108%;letter-spacing:-.01em}
+.flip-tab[aria-selected=true]{color:var(--ice)}
+.flip-tab .bar{position:absolute;left:0;right:0;bottom:-1px;height:2px;background:var(--line)}
+.flip-tab .bar::after{content:"";position:absolute;inset:0;background:var(--signal);transform:scaleX(0);transform-origin:left}
+.flip-tab[aria-selected=true] .bar::after{transform:scaleX(1);transition:transform .4s}
+.flipper.timed .flip-tab[aria-selected=true] .bar::after{transform:scaleX(0);animation:fill var(--interval,8000ms) linear forwards}
+.flipper.paused .flip-tab[aria-selected=true] .bar::after{animation-play-state:paused}
+@keyframes fill{to{transform:scaleX(1)}}
+.flip-tab:hover{color:var(--ice)}
+.flip-nav{display:flex;gap:8px;padding-bottom:14px}
+.flip-btn{--c:10px;width:46px;height:46px;display:grid;place-items:center;background:transparent;border:0;color:var(--ice);cursor:pointer;box-shadow:inset 0 0 0 1px rgba(238,236,228,.35);
+  clip-path:polygon(0 0,calc(100% - var(--c)) 0,100% var(--c),100% 100%,0 100%);transition:background .2s}
+.flip-btn:hover{background:rgba(238,236,228,.08)}
+.flip-btn svg{width:20px;height:20px;fill:none;stroke:currentColor;stroke-width:1.8}
+.flip-stage{display:grid;perspective:2200px;perspective-origin:50% 40%}
+.flip-card{grid-area:1/1;display:grid;visibility:hidden;transform-style:preserve-3d;backface-visibility:hidden;will-change:transform}
+.flip-card>.venture{height:100%}
+.flip-card .vtxt{align-self:center}
+.flip-card.is-active,.flip-card.is-leaving{visibility:visible}
+.flip-card.is-leaving{animation:flipOut .5s cubic-bezier(.55,0,.75,.3) forwards;pointer-events:none}
+.flip-card.is-entering{animation:flipIn .75s .38s cubic-bezier(.2,.75,.25,1) both}
+@keyframes flipOut{from{transform:none;opacity:1}to{transform:rotateY(calc(-88deg * var(--dir,1))) scale(.92);opacity:.25;filter:brightness(.6)}}
+@keyframes flipIn{from{transform:rotateY(calc(88deg * var(--dir,1))) scale(.92);opacity:.25;filter:brightness(.6)}60%{opacity:1}to{transform:none;opacity:1;filter:none}}
+@media (max-width:900px){
+  .flip-stage{display:block;position:relative}
+  .flip-card{position:absolute;top:0;left:0;right:0}
+  .flip-card.is-active{position:relative}
+  .flip-card>.venture{height:auto}
+}
+@media (max-width:640px){.flip-bar{flex-wrap:wrap}.flip-nav{display:none}}
+@media (prefers-reduced-motion:reduce){
+  .flip-card.is-leaving{animation:fadeOut .2s forwards!important}
+  .flip-card.is-entering{animation:fadeIn .25s both!important}
+  .flipper.timed .flip-tab[aria-selected=true] .bar::after{animation:none;transform:scaleX(1)}
+}
+@keyframes fadeOut{to{opacity:0}}
+@keyframes fadeIn{from{opacity:0}}
+
 /* CTA */
 .cta{text-align:left}
 .cta h2{max-width:16ch}
