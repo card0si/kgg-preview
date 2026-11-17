@@ -194,6 +194,8 @@ p{margin:0 0 1em;max-width:64ch}
 .office img{width:100%;height:auto;border:1px solid var(--line);--c:22px;clip-path:polygon(0 0,calc(100% - var(--c)) 0,100% var(--c),100% 100%,0 100%)}
 .office figcaption{display:flex;align-items:baseline;justify-content:space-between;gap:16px;padding-top:22px;border-top:2px solid var(--signal);margin-top:18px;width:100%}
 .office h3{font-size:clamp(26px,2.6vw,38px)}
+.office figcaption p{margin:0;font-size:15px;color:var(--muted)}
+.office img{aspect-ratio:4/5;object-fit:cover}
 @media (max-width:760px){.offices{grid-template-columns:1fr}}
 
 /* CTA */

@@ -23,7 +23,13 @@ Kenton Global Group is the umbrella company, positioned as a broad AI and digita
 
 ## Offices
 
-The homepage and About page show Cincinnati and Charleston as two illustrated buildings: `assets/img/office-cincinnati.svg` and `assets/img/office-charleston.svg`. These are stylized drawings, not photos of real buildings, and no addresses are listed.
+The homepage and About page show the Covington, KY headquarters and the Charleston, SC office. No addresses are listed.
+
+The building photos are free stock images from Unsplash. They are free for commercial use and need no credit. They are **not** photos of KGG's actual buildings, so swap in real office photos when you have them:
+- `assets/img/office-covington.jpg`: "Modern glass building at dusk with light trails" by Tiomothy Swope (unsplash.com/photos/zwe--GYIZtc)
+- `assets/img/office-charleston.jpg`: "Modern office building with glass and brick facade" by Linus Belanger (unsplash.com/photos/z-XlxM2vAPY)
+
+Both photos are cropped to 4:5 and given a light navy color grade to match the site.
 
 ## Design system
 
@@ -46,4 +52,4 @@ The homepage and About page show Cincinnati and Charleston as two illustrated bu
 - [ ] **Contact details:** an email or phone number could be added to the contact page and footer. V1 only had placeholders, so none are shown.
 - [ ] **Legal review:** Privacy and Terms are marked as drafts.
 - [ ] **Ventures:** Contrackr is listed as "In development". Add new ventures by copying the `.venture` block in `ventures/index.html`.
-- [ ] **Charleston:** confirm the state (SC or WV) if you want it shown next to the city name.
+- [ ] **Office photos:** replace the stock photos with real photos of your offices when available.
