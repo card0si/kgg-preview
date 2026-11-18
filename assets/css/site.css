@@ -371,6 +371,21 @@ p{margin:0 0 1em;max-width:64ch}
 .legal h2{font-size:clamp(24px,2.4vw,32px);margin:56px 0 16px}
 .legal h2:first-child{margin-top:0}
 
+/* ---------- Icons ---------- */
+.ico{display:block;flex:none;width:28px;height:28px;color:var(--signal)}
+.has-ico{display:flex;align-items:center;gap:12px}
+.rows h4.has-ico .ico{width:26px;height:26px}
+.seq h4.has-ico{flex-direction:column;align-items:flex-start;gap:14px}
+.seq h4.has-ico .ico{width:34px;height:34px}
+.cap h3.has-ico{flex-direction:column;align-items:flex-start;gap:16px}
+.cap h3.has-ico .ico{width:40px;height:40px;padding:8px;box-sizing:content-box;border:1px solid var(--line);background:rgba(111,168,255,.06)}
+.light .cap h3.has-ico .ico{background:#fff;border-color:rgba(16,32,64,.12)}
+.uses h4.has-ico{flex-direction:column;align-items:flex-start;gap:14px}
+.uses h4.has-ico .ico{width:34px;height:34px}
+.domain h3.has-ico{flex-direction:column;align-items:flex-start;gap:14px}
+.domain h3.has-ico .ico{width:34px;height:34px;color:var(--ice);opacity:.9}
+.domain:is(:hover,:focus-visible,.on) h3 .ico{color:var(--signal);opacity:1}
+
 /* ---------- Light sections: dark text on soft white for long reading ---------- */
 .sec.light{background:#F4F6F8;color:#3A4A60;
   --ice:#0B1630; --steel:#3A4A60; --muted:#5E6B7E; --line:rgba(16,32,64,.14); --signal:#1F5FD1}
@@ -412,29 +427,85 @@ p{margin:0 0 1em;max-width:64ch}
 
 /* ---------- Mobile ---------- */
 @media (max-width:760px){
-  :root{--sy:60px}
+  :root{--sy:56px;--px:20px}
+  body{font-size:16.5px}
+  .lede{font-size:18px}
   .phero{min-height:0}
-  .phero .wrap{padding-top:calc(var(--hh) + 48px);padding-bottom:40px}
-  .phero h1{font-size:clamp(36px,10vw,48px)}
-  .head{margin-bottom:32px;gap:16px}
-  .statement{font-size:26px}
-  .cap{padding:28px 0;gap:14px}
-  .cap h3{font-size:22px}
-  .office img{aspect-ratio:4/3}
-  .office figcaption{margin-top:12px;padding-top:14px}
-  .venture .vimg{min-height:200px}
-  .venture .vtxt{padding:24px 20px}
-  .seq li::before{margin-bottom:10px}
+  .phero .wrap{padding-top:calc(var(--hh) + 44px);padding-bottom:36px}
+  .phero h1{font-size:clamp(34px,10vw,46px)}
+  .head{margin-bottom:28px;gap:14px}
+  .head h2,h2{font-size:clamp(30px,8.4vw,38px)}
+  .statement{font-size:24px}
+  .split{gap:32px}
+
+  /* domain cards: compact rows with the icon beside the title */
+  .domain{flex:none;min-height:0;padding:28px 20px 24px}
+  .domain h3.has-ico{flex-direction:row;align-items:center;gap:12px;font-size:24px;max-width:none}
+  .domain h3.has-ico .ico{width:30px;height:30px;color:var(--signal)}
+  .domain::before{background:linear-gradient(90deg,rgba(8,18,38,.94) 0%,rgba(8,18,38,.78) 60%,rgba(8,18,38,.55) 100%)!important}
+  .domain p{font-size:15.5px}
+  .domain .go{margin-top:14px}
+
+  /* engagement steps: a vertical timeline with numbered markers */
+  .seq{grid-template-columns:1fr;row-gap:0;border-top:0;position:relative}
+  .seq li{display:grid;grid-template-columns:44px 1fr;column-gap:16px;padding:0 0 26px;position:relative}
+  .seq li::before{content:counter(s);grid-row:1/3;width:44px;height:44px;margin:0;display:grid;place-items:center;
+    border:1px solid var(--line);background:var(--abyss);color:var(--signal);font-size:16px;font-weight:700;position:relative;z-index:1}
+  .light .seq li::before{background:#fff;border-color:rgba(16,32,64,.16)}
+  .seq li::after{top:44px;bottom:0;left:21.5px;width:1px;height:auto;background:var(--line)}
+  .seq li:last-child::after{display:none}
+  .seq li:last-child{padding-bottom:0}
+  .seq h4{margin:10px 0 6px}
+  .seq h4.has-ico{flex-direction:row;align-items:center;gap:10px}
+  .seq h4.has-ico .ico{display:none}
+  .seq p{max-width:none;font-size:15.5px}
+
+  /* principle rows */
+  .rows li{grid-template-columns:1fr;gap:6px;padding:20px 0}
+  .rows p{font-size:15.5px}
+
+  /* capability lists: icon beside title */
+  .cap{padding:26px 0;gap:12px}
+  .cap h3{font-size:21px}
+  .cap h3.has-ico{flex-direction:row;align-items:center;gap:14px}
+  .cap h3.has-ico .ico{width:26px;height:26px;padding:7px}
+  .cap .for{margin-top:8px}
+  .cap ul{gap:8px 16px;font-size:15px}
+
+  /* use cases: two columns of small tiles */
+  .uses{grid-template-columns:1fr 1fr;gap:12px}
+  .uses li{border:1px solid var(--line);padding:16px 14px;background:rgba(255,255,255,.02)}
+  .light .uses li{background:#fff}
+  .uses h4{font-size:16px;margin-bottom:6px}
+  .uses h4.has-ico{gap:10px}
+  .uses h4.has-ico .ico{width:26px;height:26px}
+  .uses p{font-size:14px;line-height:1.45}
+
+  /* offices: side by side, whole building in frame */
+  .offices{grid-template-columns:1fr 1fr;gap:12px}
+  .office img{aspect-ratio:4/5;object-fit:cover;--c:14px}
+  .office figcaption{flex-direction:column;align-items:flex-start;gap:2px;margin-top:10px;padding-top:10px}
+  .office h3{font-size:17px}
+  .office figcaption p{font-size:13px}
+
+  .venture .vimg{min-height:180px}
+  .venture .vimg.brand{padding:28px}
+  .venture .vtxt{padding:22px 18px}
+  .venture h3{font-size:22px}
+  .spec div{padding:12px 0}
+  .scenario{padding-left:18px}
+  .scenario p{font-size:17px}
+  .faq summary{font-size:17px;padding:18px 36px 18px 0}
+  .tbl{font-size:15.5px}
   .trace{display:none}
-  .faq summary{font-size:18px;padding:20px 40px 20px 0}
+  .cta h2{font-size:30px}
+  .cta .lede{font-size:17px}
   .fgrid{gap:28px}
-  .ftr .fbar{margin-top:40px}
-  .cta h2{font-size:32px}
-  .cta .lede{font-size:18px}
-  /* touch screens: no 3D flip, a quick crossfade instead */
+  .ftr{padding-top:56px}
+  .ftr .fbar{margin-top:36px}
   .flip-card.is-leaving{animation:fadeOut .2s forwards}
   .flip-card.is-entering{animation:fadeIn .3s .1s both}
-  .flip-tab span{font-size:18px}
+  .flip-tab span{font-size:17px}
   .form .btn{width:100%;justify-content:center}
 }
 @media (hover:none){.domain img{transform:none}}
