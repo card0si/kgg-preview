@@ -66,9 +66,18 @@ p{margin:0 0 1em;max-width:64ch}
 .hdr{position:fixed;inset:0 0 auto 0;height:var(--hh);z-index:50;transition:background .3s,box-shadow .3s}
 .hdr.solid,.hdr.open{background:rgba(8,18,38,.94);backdrop-filter:blur(10px);-webkit-backdrop-filter:blur(10px);box-shadow:0 1px 0 var(--line)}
 .hdr .wrap{height:100%;display:flex;align-items:center;gap:40px}
-.mark{display:flex;flex-direction:column;align-items:flex-start;gap:3px;text-decoration:none;color:var(--ice);line-height:1}
-.mark b{font-family:"Cinzel",Georgia,serif;font-weight:700;font-size:25px;letter-spacing:.07em}
-.mark i{font-style:normal;font-size:9.5px;letter-spacing:.42em;font-weight:500;color:var(--steel);padding-left:2px}
+.mark{display:flex;align-items:center;text-decoration:none;flex-shrink:0;line-height:0}
+.mark img{display:block;width:auto;height:44px}
+.mark .logo-mark{display:none}
+.ftr .mark img{height:56px}
+@media (max-width:760px){
+  .hdr .mark img{height:38px}
+  .ftr .mark img{height:48px}
+}
+@media (max-width:520px){
+  .hdr .mark .logo-full{display:none}
+  .hdr .mark .logo-mark{display:block;height:32px}
+}
 .nav{margin-left:auto;display:flex;align-items:center;gap:6px}
 .nav ul{list-style:none;margin:0;padding:0;display:flex;gap:2px}
 .nav ul a{display:block;padding:10px 14px;font-size:15.5px;font-weight:500;color:var(--steel);text-decoration:none;position:relative}
