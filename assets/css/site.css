@@ -205,8 +205,8 @@ p{margin:0 0 1em;max-width:64ch}
 @media (max-width:560px){.rows li{grid-template-columns:1fr;gap:8px}}
 
 /* Image band */
-.band{position:relative;isolation:isolate;overflow:hidden}
-.band>img{position:absolute;inset:0;width:100%;height:100%;object-fit:cover;z-index:-2}
+.band{position:relative;isolation:isolate;overflow:hidden;background:var(--abyss)}
+.band>img{position:absolute;top:-1px;left:0;width:100%;height:calc(100% + 2px);max-width:none;object-fit:cover;z-index:-2}
 .band::before{content:"";position:absolute;inset:0;z-index:-1;background:linear-gradient(90deg,rgba(8,18,38,.95) 0%,rgba(8,18,38,.82) 45%,rgba(8,18,38,.45) 100%)}
 
 /* Venture feature */
@@ -416,17 +416,65 @@ p{margin:0 0 1em;max-width:64ch}
 .light .scenario p{color:#0B1630}
 
 /* ---------- Footer ---------- */
-.ftr{background:#060E1E;border-top:1px solid var(--line);padding:clamp(64px,8vw,104px) 0 36px;font-size:15.5px}
-.fgrid{display:grid;grid-template-columns:1.4fr repeat(3,1fr);gap:40px}
+.ftr{background:#060E1E;border-top:1px solid rgba(200,208,220,.1);padding:clamp(64px,8vw,104px) 0 36px;font-size:15.5px;overflow-x:clip}
+/* pages that end on an image band: no hairline at the junction */
+main:has(> .band:last-child) + .ftr{border-top:0}
+.fgrid{display:grid;grid-template-columns:1.7fr repeat(3,1fr);gap:40px}
 .ftr h4{font-size:15px;font-weight:600;color:var(--ice);margin-bottom:16px;font-stretch:106%}
 .ftr ul{list-style:none;margin:0;padding:0}
 .ftr li{margin:0 0 10px}
-.ftr a{color:var(--steel);text-decoration:none}
+.ftr a{color:var(--steel);text-decoration:none;transition:color .2s,background-color .2s,border-color .2s}
 .ftr a:hover{color:var(--ice)}
 .ftr .about{max-width:34ch;margin-top:22px;color:var(--muted)}
-.fbar{display:flex;justify-content:space-between;flex-wrap:wrap;gap:16px;margin-top:72px;padding-top:24px;border-top:1px solid var(--line);color:var(--muted);font-size:14px}
+
+/* contact tiles */
+.ftr .fcontact{display:grid;gap:10px;max-width:380px;margin-top:28px}
+.ftr .fcontact li{margin:0}
+.ftr .fcontact a{display:flex;align-items:center;gap:14px;min-height:62px;padding:10px 16px 10px 12px;border:1px solid var(--line);background:rgba(111,168,255,.04);color:var(--ice)}
+.ftr .fcontact a:hover{border-color:rgba(111,168,255,.55);background:rgba(111,168,255,.09)}
+.ftr .fcontact .ico{width:38px;height:38px;padding:9px;color:var(--signal);background:rgba(111,168,255,.1)}
+.ftr .fcontact span{display:flex;flex-direction:column;min-width:0;font-size:15.5px;font-weight:520;line-height:1.3;white-space:nowrap}
+.ftr .fcontact small{font-size:11.5px;font-weight:600;letter-spacing:.09em;text-transform:uppercase;color:var(--muted);margin-bottom:3px}
+
+.fbar{display:flex;justify-content:space-between;align-items:center;flex-wrap:wrap;gap:16px;margin-top:72px;padding-top:24px;border-top:1px solid var(--line);color:var(--muted);font-size:14px}
+.flegal{display:flex;flex-wrap:wrap;gap:4px 28px}
 .fbar a{color:var(--muted)}
-@media (max-width:900px){.fgrid{grid-template-columns:1fr 1fr}.fgrid>div:first-child{grid-column:1/-1}}
+.fbar a:hover{color:var(--ice)}
+
+/* tablet: brand row on top, links in three even columns */
+@media (max-width:1100px){
+  .fgrid{grid-template-columns:repeat(3,1fr);gap:48px 32px}
+  .fbrand{grid-column:1/-1;display:grid;grid-template-columns:minmax(0,1fr) minmax(0,380px);column-gap:48px;align-items:start}
+  .fbrand .mark{grid-column:1}
+  .ftr .about{grid-column:1}
+  .ftr .fcontact{grid-column:2;grid-row:1/3;margin-top:0;width:100%}
+}
+
+/* mobile: stacked brand + contact, 2-col link grid, "Start here" as action rows */
+@media (max-width:760px){
+  .ftr{padding:48px 0 calc(24px + env(safe-area-inset-bottom,0px))}
+  .fgrid{grid-template-columns:minmax(0,1fr) minmax(0,1fr);gap:0 20px}
+  .fbrand{display:block;padding-bottom:36px}
+  .ftr .about{font-size:15px;line-height:1.55;margin-top:18px;max-width:40ch}
+  .ftr .fcontact{max-width:none;margin-top:24px}
+  .ftr .fcontact a{min-height:64px;padding:10px 14px 10px 10px}
+  .ftr .fcontact span{font-size:16px;white-space:normal;overflow-wrap:anywhere}
+  .fcol{padding-top:24px;border-top:1px solid var(--line)}
+  .ftr h4{font-size:12px;font-weight:600;letter-spacing:.1em;text-transform:uppercase;color:var(--muted);margin-bottom:4px}
+  .ftr li{margin:0}
+  .fcol a{display:flex;align-items:center;min-height:44px;padding:6px 0;font-size:15.5px;line-height:1.3}
+  .fstart{grid-column:1/-1;margin-top:24px}
+  .fstart ul{margin-top:4px}
+  .fstart li+li{border-top:1px solid var(--line)}
+  .fstart a{justify-content:space-between;gap:16px;min-height:52px;color:var(--ice);font-weight:500}
+  .fstart a::after{content:"";flex:none;width:8px;height:8px;margin-right:4px;border-top:1.5px solid var(--signal);border-right:1.5px solid var(--signal);transform:rotate(45deg)}
+  .fbar{flex-direction:column;align-items:flex-start;gap:6px;margin-top:20px;padding-top:12px;font-size:13.5px}
+  .flegal{order:-1;gap:0 24px}
+  .flegal a{display:inline-flex;align-items:center;min-height:44px;font-size:14.5px;color:var(--steel)}
+}
+@media (max-width:359px){
+  .ftr .fcontact span{font-size:15px}
+}
 
 /* 404 */
 .nf{min-height:100svh;display:flex;align-items:center}
@@ -509,9 +557,6 @@ p{margin:0 0 1em;max-width:64ch}
   .trace{display:none}
   .cta h2{font-size:30px}
   .cta .lede{font-size:17px}
-  .fgrid{gap:28px}
-  .ftr{padding-top:56px}
-  .ftr .fbar{margin-top:36px}
   .flip-card.is-leaving{animation:fadeOut .2s forwards}
   .flip-card.is-entering{animation:fadeIn .3s .1s both}
   .flip-tab span{font-size:17px}
