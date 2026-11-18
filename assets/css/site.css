@@ -425,6 +425,8 @@ main:has(> .band:last-child) + .ftr{border-top:0}
 .ftr a{color:var(--steel);text-decoration:none;transition:color .2s}
 .ftr a:hover{color:var(--ice);text-decoration:underline;text-underline-offset:3px}
 .ftr .fcontact a{overflow-wrap:anywhere}
+.aside .reach{margin:0 0 28px;font-size:14px;line-height:1.45;color:var(--steel)}
+.aside .reach a{color:inherit}
 
 .fbar{display:flex;justify-content:space-between;align-items:center;gap:20px;margin-top:32px;padding-top:16px;border-top:1px solid var(--line);color:var(--muted);font-size:13px}
 .flegal-wrap{display:flex;flex-wrap:wrap;align-items:center;gap:4px 28px;min-width:0}
