@@ -53,95 +53,71 @@
     box.addEventListener('mouseleave', function () { /* keep last hovered open */ });
   }
 
-  // Contact form: checks required fields, then shows the confirmation.
-  // TODO: point the form's action at a form service (Formspree, Basin, Netlify Forms) to actually deliver messages.
+  // Contact form.
+  // Until a Web3Forms access key is set below, submitting opens the visitor's email app with the
+  // message filled in (nothing is claimed as "sent"). Once the key is set, messages are delivered
+  // through Web3Forms and only a confirmed success redirects to /thanks/.
+  var WEB3FORMS_KEY = 'YOUR_WEB3FORMS_ACCESS_KEY'; // TODO(owner): paste the Web3Forms access key here
+  var CONTACT_EMAIL = 'contact@kentonglobalgroup.com';
   var form = document.querySelector('form.form');
   if (form) {
+    var err = form.querySelector('.err'), ok = form.querySelector('.ok');
+    var hasKey = WEB3FORMS_KEY && WEB3FORMS_KEY.indexOf('YOUR_') !== 0;
+    function val(n) { var f = form.elements[n]; return f ? f.value.trim() : ''; }
+    function showOk(html) { ok.innerHTML = html; ok.hidden = false; ok.focus(); }
     form.addEventListener('submit', function (e) {
+      e.preventDefault();
       var bad = [];
       form.querySelectorAll('[required]').forEach(function (f) {
         var invalid = !f.value.trim() || (f.type === 'email' && !/^\S+@\S+\.\S+$/.test(f.value));
         f.setAttribute('aria-invalid', invalid);
         if (invalid) bad.push(f);
       });
-      var err = form.querySelector('.err');
       if (bad.length) {
-        e.preventDefault();
         err.hidden = false;
         err.textContent = 'Add your ' + bad.map(function (f) { return f.dataset.name; }).join(', ') + ' so we can reply.';
         bad[0].focus();
         return;
       }
-      if (!form.getAttribute('action')) {
-        e.preventDefault();
-        err.hidden = true;
-        form.querySelectorAll('.field').forEach(function (f) { f.hidden = true; });
-        var ok = form.querySelector('.ok');
-        ok.hidden = false;
-        ok.focus();
-      }
+      err.hidden = true;
+      if (form.elements.botcheck && form.elements.botcheck.checked) return; // honeypot
+      var subject = 'Website enquiry: ' + val('topic') + (val('organization') ? ' (' + val('organization') + ')' : '');
+      var body = 'Name: ' + val('name') + '\nBusiness: ' + (val('organization') || '-') + '\nEmail: ' + val('email') +
+        '\nPhone: ' + (val('phone') || '-') + '\nNeeds: ' + val('topic') + '\n\n' + val('message');
+      var mailto = 'mailto:' + CONTACT_EMAIL + '?subject=' + encodeURIComponent(subject) + '&body=' + encodeURIComponent(body);
+      var fallback = '<p><strong>Your email app should open with your message ready to send.</strong> Press send there to reach us.</p>' +
+        '<p>If nothing opened, email <a href="' + mailto + '">' + CONTACT_EMAIL + '</a> or call <a href="tel:+18598881429">(859) 888-1429</a>.</p>';
+      if (!hasKey || !window.fetch) { window.location.href = mailto; showOk(fallback); return; }
+      var btn = form.querySelector('button[type=submit]');
+      btn.disabled = true; btn.textContent = 'Sending...';
+      fetch('https://api.web3forms.com/submit', {
+        method: 'POST', headers: { 'Content-Type': 'application/json', Accept: 'application/json' },
+        body: JSON.stringify({ access_key: WEB3FORMS_KEY, subject: subject, from_name: 'kentonglobalgroup.com',
+          name: val('name'), email: val('email'), phone: val('phone'), organization: val('organization'), topic: val('topic'), message: val('message') })
+      }).then(function (r) { return r.json(); }).then(function (j) {
+        if (j && j.success) { window.location.href = form.dataset.thanks || '../thanks/'; return; }
+        throw new Error('not sent');
+      }).catch(function () {
+        btn.disabled = false; btn.textContent = 'Send message';
+        err.hidden = false;
+        err.innerHTML = 'Your message did not go through. Please email <a href="' + mailto + '">' + CONTACT_EMAIL + '</a> or call <a href="tel:+18598881429">(859) 888-1429</a>.';
+      });
     });
   }
 
-  // Clients and ventures: flip between cards with tabs, arrows, keys and a timer
-  document.querySelectorAll('[data-flipper]').forEach(function (root) {
-    var tabs = [].slice.call(root.querySelectorAll('.flip-tab'));
-    var cards = [].slice.call(root.querySelectorAll('.flip-card'));
-    var cur = 0, busy = false, timer = null, hover = false;
-    var ms = +root.dataset.interval || 8000;
-    var still = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
-    root.style.setProperty('--interval', ms + 'ms');
-
-    function show(i, dir) {
-      if (busy || i === cur) return;
-      busy = true;
-      var out = cards[cur], inn = cards[i];
-      dir = dir || (i > cur ? 1 : -1);
-      out.style.setProperty('--dir', dir); inn.style.setProperty('--dir', dir);
-      out.classList.add('is-leaving'); out.classList.remove('is-active'); out.setAttribute('inert', '');
-      inn.classList.add('is-active', 'is-entering'); inn.removeAttribute('inert');
-      tabs.forEach(function (t, k) { t.setAttribute('aria-selected', k === i); t.tabIndex = k === i ? 0 : -1; });
-      cur = i;
-      inn.addEventListener('animationend', function done(e) {
-        if (e.target !== inn) return;
-        inn.removeEventListener('animationend', done);
-        inn.classList.remove('is-entering'); out.classList.remove('is-leaving'); busy = false;
-      });
-      restart();
-    }
-    function step(d) { show((cur + d + cards.length) % cards.length, d); }
-    function restart() {
-      clearTimeout(timer);
-      if (still || cards.length < 2) return;
-      root.classList.remove('timed'); void root.offsetWidth; root.classList.add('timed');
-      if (root.classList.contains('paused')) { left = ms; return; }
-      tick(ms);
-    }
-    var left = ms, started = 0;
-    function tick(t) { left = t; started = Date.now(); clearTimeout(timer); timer = setTimeout(function () { step(1); }, t); }
-    function pause() { if (root.classList.contains('paused')) return; root.classList.add('paused'); clearTimeout(timer); left -= Date.now() - started; }
-    function resume() { if (!root.classList.contains('paused')) return; root.classList.remove('paused'); if (!still) tick(Math.max(left, 600)); }
-
-    tabs.forEach(function (t, k) {
-      t.addEventListener('click', function () { show(k); });
-      t.addEventListener('keydown', function (e) {
-        var d = e.key === 'ArrowRight' ? 1 : e.key === 'ArrowLeft' ? -1 : 0;
-        if (!d) return;
-        e.preventDefault(); step(d); tabs[cur].focus();
-      });
-    });
-    root.querySelectorAll('.flip-btn').forEach(function (b) { b.addEventListener('click', function () { step(+b.dataset.dir); }); });
-    root.addEventListener('mouseenter', function () { hover = true; pause(); });
-    root.addEventListener('mouseleave', function () { hover = false; resume(); });
-    root.addEventListener('focusin', pause);
-    root.addEventListener('focusout', function () { if (!hover && !root.contains(document.activeElement)) resume(); });
-    document.addEventListener('visibilitychange', function () { document.hidden ? pause() : (!hover && resume()); });
-    // only start the timer once the section is on screen
-    if ('IntersectionObserver' in window) {
-      var io = new IntersectionObserver(function (es) { if (es[0].isIntersecting) { restart(); io.disconnect(); } }, { threshold: .35 });
-      io.observe(root);
-    } else restart();
-  });
+  // Google Analytics 4: inert until a real measurement ID is set.
+  var GA_ID = 'G-XXXXXXX'; // TODO(owner): replace with the GA4 measurement ID, then update the Privacy page
+  if (GA_ID && GA_ID !== 'G-XXXXXXX') {
+    var gs = document.createElement('script');
+    gs.async = true; gs.src = 'https://www.googletagmanager.com/gtag/js?id=' + GA_ID;
+    document.head.appendChild(gs);
+    window.dataLayer = window.dataLayer || [];
+    window.gtag = function () { window.dataLayer.push(arguments); };
+    window.gtag('js', new Date());
+    window.gtag('config', GA_ID);
+    // count the thank-you page as a conversion
+    if (/\/thanks\/?$/.test(location.pathname)) window.gtag('event', 'generate_lead');
+  }
 
   var y = document.querySelector('[data-year]');
   if (y) y.textContent = new Date().getFullYear();
