@@ -103,9 +103,9 @@ p{margin:0 0 .85em;max-width:64ch}
 
 /* ---------- Home hero ---------- */
 .hero{position:relative;min-height:75vh;min-height:75svh;display:flex;align-items:flex-end;overflow:hidden;isolation:isolate}
-.hero>img{position:absolute;inset:0;width:100%;height:100%;object-fit:cover;z-index:-2;object-position:60% 55%;transform:scale(1.06);animation:settle 2.4s cubic-bezier(.2,.7,.2,1) forwards}
+.hero>img{position:absolute;inset:0;width:100%;height:100%;object-fit:cover;z-index:-2;object-position:95% 35%;transform:scale(1.06);animation:settle 2.4s cubic-bezier(.2,.7,.2,1) forwards}
 .hero::before{content:"";position:absolute;inset:0;z-index:-1;background:
-  linear-gradient(90deg,rgba(8,18,38,.94) 0%,rgba(8,18,38,.72) 38%,rgba(8,18,38,.2) 72%,rgba(8,18,38,.35) 100%),
+  linear-gradient(90deg,rgba(8,18,38,.94) 0%,rgba(8,18,38,.72) 42%,rgba(8,18,38,.2) 78%,rgba(8,18,38,.35) 100%),
   linear-gradient(0deg,var(--abyss) 0%,rgba(8,18,38,0) 42%)}
 .hero .wrap{width:100%;padding-bottom:clamp(40px,6vh,72px);padding-top:calc(var(--hh) + 32px)}
 .hero .brandname{font-size:clamp(54px,9.4vw,146px);line-height:.9;letter-spacing:-.04em;font-stretch:125%;font-weight:700;max-width:none;margin:0;color:var(--ice)}
