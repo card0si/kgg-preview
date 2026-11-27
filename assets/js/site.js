@@ -157,17 +157,26 @@
 
     // Step inside: the screenshot swells to fill the screen while the open book is pulled into it.
     // The new tab opens when the dive ends (~650ms), still inside the browser's user-activation window.
+    // A logo plate (no site screenshot) dives as a copy of the plate itself.
     var DIVE_MS = 650;
     function dive(dlg) {
       var link = dlg.querySelector('.peek'), img = link && link.querySelector('img'), spread = dlg.querySelector('.spread');
       if (!img || !canAnimate(dlg)) return null;
-      var r = img.getBoundingClientRect(), b = spread.getBoundingClientRect();
+      var plate = link.querySelector('.plate'), src = plate || img;
+      var r = src.getBoundingClientRect(), b = spread.getBoundingClientRect();
+      if (plate) { var e = plate.clientLeft; r = { left: r.left + e, top: r.top + e, width: r.width - 2 * e, height: r.height - 2 * e }; } // the ghost's ring stands in for the plate's border
       var vw = document.documentElement.clientWidth, vh = window.innerHeight;
       var cx = r.left + r.width / 2, cy = r.top + r.height / 2;
       var origin = (cx - b.left) + 'px ' + (cy - b.top) + 'px';
-      var ghost = document.createElement('img');
-      ghost.className = 'dive'; ghost.alt = ''; ghost.setAttribute('aria-hidden', 'true');
-      ghost.src = img.currentSrc || img.src;
+      var ghost;
+      if (plate) {
+        ghost = plate.cloneNode(true);
+        ghost.className = 'plate dive'; ghost.setAttribute('aria-hidden', 'true');
+      } else {
+        ghost = document.createElement('img');
+        ghost.className = 'dive'; ghost.alt = ''; ghost.setAttribute('aria-hidden', 'true');
+        ghost.src = img.currentSrc || img.src;
+      }
       var veil = document.createElement('div');
       veil.className = 'veil'; veil.setAttribute('aria-hidden', 'true');
       veil.style.setProperty('--cx', cx + 'px'); veil.style.setProperty('--cy', cy + 'px');
@@ -229,6 +238,7 @@
       });
       // Screenshot (click, tap or Enter): play the dive, then open the site when it ends.
       // The open is scheduled from this click handler so it stays inside the user-activation window.
+      // Links with target="_blank" open a new tab; links without it continue in this tab.
       var peek = dlg.querySelector('.peek');
       if (peek) peek.addEventListener('click', function (e) {
         if (e.button !== 0 || e.metaKey || e.ctrlKey || e.shiftKey || e.altKey) return; // let the browser handle modified clicks
@@ -238,6 +248,7 @@
         stop();
         function go() {
           peekTimer = 0;
+          if (peek.target !== '_blank') { location.assign(peek.href); return; } // keep the dive on screen until the page changes
           var w = window.open(peek.href, '_blank');
           if (w) { try { w.opener = null; } catch (err) {} }
           if (undive) { undive(); undive = null; }
@@ -246,6 +257,12 @@
         if (!canAnimate(dlg)) { go(); return; }
         undive = dive(dlg);
         peekTimer = setTimeout(go, DIVE_MS);
+      });
+      // Back from a same-tab link: a page restored from the back/forward cache would still be mid-dive.
+      window.addEventListener('pageshow', function () {
+        if (peekTimer) { clearTimeout(peekTimer); peekTimer = 0; }
+        if (undive) { undive(); undive = null; }
+        lastPeek = 0;
       });
       dlg.addEventListener('cancel', function (e) { e.preventDefault(); shut(); });
       dlg.querySelector('.tclose').addEventListener('click', shut);
