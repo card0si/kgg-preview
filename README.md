@@ -53,7 +53,7 @@ Contrackr has its own brand colors, separate from KGG: Graphite `#0E0F12`, Plate
 
 ## Clients
 
-Steidle Fabricating (https://steidlefabricating.com) is a named client, with permission. It appears as a static card on Home (above the Contrackr venture card), on About, and as the client project on Web Development. There is no flip card any more. To add a card, copy a `.venture` block inside `.stack`.
+Steidle Fabricating (https://steidlefabricating.com) is a named client, with permission. It appears as a book on the Home bookshelf ("Sites we've built"), on About, and as the client project on Web Development. There is no flip card any more. To add a card, copy a `.venture` block inside `.stack`.
 
 ## Design system
 
