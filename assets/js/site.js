@@ -123,17 +123,13 @@
   var books = document.querySelectorAll('.book[data-book]');
   if (books.length && typeof HTMLDialogElement === 'function') {
     var still = window.matchMedia('(prefers-reduced-motion: reduce)');
-    var narrow = window.matchMedia('(max-width: 760px)');
     var EASE = 'cubic-bezier(.2,.7,.2,1)';
     function canAnimate(el) { return !still.matches && typeof el.animate === 'function'; }
 
     function openAnim(dlg, spine) {
       var spread = dlg.querySelector('.spread'), cover = dlg.querySelector('.cover');
       var fade = dlg.querySelectorAll('.pl, .pr, .tclose');
-      if (narrow.matches) {
-        return [spread.animate([{ transform: 'translateY(48px)', opacity: 0 }, { transform: 'none', opacity: 1 }], { duration: 360, easing: EASE })];
-      }
-      // Start as a closed book sitting where the spine is, grow to full size, then swing the cover open.
+      // Same motion on every screen size: start as a closed book sitting where the spine is, grow to full size, then swing the cover open.
       var a = spine.getBoundingClientRect(), b = spread.getBoundingClientRect();
       var s = Math.max(0.15, a.height / b.height);
       var tx = (a.left + a.width / 2) - (b.left + b.width / 2) - s * b.width / 4;
@@ -218,7 +214,7 @@
         closing = true;
         stop();
         if (!canAnimate(dlg)) { finish(); return; }
-        running = openAnim(dlg, spine).map(function (x) { x.effect.updateTiming({ fill: 'both' }); x.playbackRate = narrow.matches ? 1.4 : 1.6; x.reverse(); return x; });
+        running = openAnim(dlg, spine).map(function (x) { x.effect.updateTiming({ fill: 'both' }); x.playbackRate = 1.6; x.reverse(); return x; });
         running[0].finished.then(finish, function () {});
       }
       spine.addEventListener('click', function () {

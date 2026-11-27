@@ -661,23 +661,30 @@ main:has(> .band:last-child) + .ftr{border-top:0}
 .tome ::selection{background:#E8D9B0;color:var(--ink)}
 .tome :focus-visible{outline-color:#2456B8}
 html.tome-open{overflow:hidden}
-.spread{position:relative;display:grid;grid-template-columns:1fr 1fr;perspective:2200px;padding:12px 14px 16px;border-radius:5px;
+.spread{position:relative;display:grid;grid-template-columns:minmax(0,1fr) minmax(0,1fr);perspective:2200px;padding:12px 20px 26px;border-radius:5px;
   background:linear-gradient(90deg,rgba(255,255,255,.06),rgba(0,0,0,0) 30%,rgba(0,0,0,0) 70%,rgba(255,255,255,.06)),var(--bk);
   box-shadow:inset 0 0 0 1px rgba(255,255,255,.06),0 40px 80px -30px rgba(0,0,0,.85),0 12px 24px -12px rgba(0,0,0,.6)}
-.pg{position:relative;padding:clamp(20px,2.4vw,32px);background-color:var(--paper)}
-/* Gutter: each page darkens toward the spine and curls up slightly; stacked page edges show on the outer sides. */
+.pg{position:relative;padding:clamp(20px,2.4vw,32px);background-color:var(--paper);max-height:calc(100dvh - 60px)}
+/* Gutter: each page darkens toward the spine and curls up slightly. */
 .pl{display:flex;flex-direction:column;justify-content:center;border-radius:3px 0 0 3px;
   background-image:linear-gradient(90deg,rgba(255,255,255,.5),rgba(255,255,255,0) 6%,rgba(0,0,0,0) 82%,rgba(90,66,36,.08) 93%,rgba(70,50,28,.24) 100%),radial-gradient(120% 90% at 30% 40%,var(--paper),var(--paper2));
-  box-shadow:-1px 1px 0 var(--edge),-2px 2px 0 var(--paper),-3px 3px 0 var(--edge),-4px 4px 0 var(--paper2),-5px 5px 0 #CBBFA6,-6px 6px 10px -2px rgba(0,0,0,.35)}
-.pr{display:flex;flex-direction:column;justify-content:center;padding-right:clamp(48px,4.6vw,64px);border-radius:0 3px 3px 0;
+  box-shadow:inset 1px 0 0 rgba(120,96,60,.18),inset 0 -1px 0 rgba(120,96,60,.16)}
+.pr{display:flex;flex-direction:column;overflow-y:auto;overscroll-behavior:contain;padding-right:clamp(48px,4.6vw,64px);border-radius:0 3px 3px 0;
   background-image:linear-gradient(270deg,rgba(255,255,255,.5),rgba(255,255,255,0) 6%,rgba(0,0,0,0) 82%,rgba(90,66,36,.08) 93%,rgba(70,50,28,.26) 100%),radial-gradient(120% 90% at 70% 40%,var(--paper),var(--paper2));
-  box-shadow:1px 1px 0 var(--edge),2px 2px 0 var(--paper),3px 3px 0 var(--edge),4px 4px 0 var(--paper2),5px 5px 0 #CBBFA6,6px 6px 10px -2px rgba(0,0,0,.35)}
-/* The spine crease (part of the right page so it fades with the pages while the book is closed). */
-.pr::before{content:"";position:absolute;top:0;bottom:0;left:-1px;width:2px;background:linear-gradient(180deg,rgba(60,42,22,.12),rgba(60,42,22,.32) 50%,rgba(60,42,22,.12));pointer-events:none}
-.pr .tag{display:flex;align-items:center;gap:10px;margin:0 0 10px;font-size:13px;font-weight:560;letter-spacing:.1em;text-transform:uppercase;color:var(--inkm)}
+  box-shadow:inset -1px 0 0 rgba(120,96,60,.18),inset 0 -1px 0 rgba(120,96,60,.16)}
+/* Page block under both pages: stacked paper edges, each layer a step further out and a shade darker,
+   show on both outer sides and along the bottom (top stays flush). It lives on the left page so it fades with the pages. */
+.pl::before{content:"";position:absolute;z-index:-1;top:0;left:0;bottom:0;width:200%;border-radius:3px;pointer-events:none;
+  box-shadow:0 1px 0 1px #E4D9C3,0 2px 0 2px #FAF6EC,0 3px 0 3px #D3C6AA,0 4px 0 4px #F2EBDC,0 5px 0 5px #C8B99B,0 6px 0 6px #E9E0CC,0 7px 0 7px #B8A787,0 8px 1px 8px #9A896A,0 14px 18px 6px rgba(0,0,0,.45)}
+/* The spine crease (on the left page, which never scrolls, so it fades with the pages while the book is closed). */
+.pl::after{content:"";position:absolute;z-index:1;top:0;bottom:0;right:-1px;width:2px;background:linear-gradient(180deg,rgba(60,42,22,.12),rgba(60,42,22,.32) 50%,rgba(60,42,22,.12));pointer-events:none}
+.pr .tag{display:flex;align-items:center;gap:10px;margin:0 0 10px;flex:none;font-size:13px;font-weight:560;letter-spacing:.1em;text-transform:uppercase;color:var(--inkm)}
 .pr .tag::before{content:"";width:18px;height:2px;background:var(--band);box-shadow:0 0 0 .5px rgba(43,38,32,.25)}
 .pr h3{margin-bottom:12px;color:var(--ink)}
 .pr p{font-size:16.5px;line-height:1.6;color:var(--ink2)}
+/* Centered while it fits; if the right page has to scroll, its top stays reachable. */
+.pr>.tag{margin-top:auto}
+.pr>.visit{margin-bottom:auto}
 .visit{align-self:flex-start;display:inline-flex;gap:6px;margin-top:4px;font-size:15px;font-weight:600;font-stretch:108%;color:var(--ink);text-decoration-color:rgba(43,38,32,.4)}
 .visit:hover{text-decoration-color:var(--ink)}
 /* The screenshot is a plate tipped onto the left page; clicking it dives into the site. */
@@ -709,14 +716,33 @@ html.tome-open{overflow:hidden}
   .book::before{top:38px}
   .book::after{bottom:24px}
   .books::after{height:96px}
-  .tome{width:100%;max-height:100dvh;margin:auto 0 0;overflow:auto;overscroll-behavior:contain}
-  .spread{grid-template-columns:1fr;padding:10px 10px 0;border-radius:8px 8px 0 0}
-  .pl{padding:54px 18px 6px;border-radius:4px 4px 0 0;box-shadow:none;background-image:radial-gradient(120% 90% at 50% 30%,var(--paper),var(--paper2))}
-  .pr{padding:18px 18px 28px;border-radius:0;box-shadow:none;background-image:linear-gradient(180deg,rgba(70,50,28,.14),rgba(0,0,0,0) 14px),radial-gradient(120% 90% at 50% 60%,var(--paper),var(--paper2))}
-  .pr::before{display:none}
-  .pr h3{font-size:22px}
-  .pr p{font-size:16px}
-  .peek .hint{margin-top:10px}
-  .tclose{top:18px;right:18px;background:rgba(43,38,32,.08)}
-  .cover{display:none}
+}
+/* Phones: the same horizontal two-page spread, sized down and centered; the right page scrolls a little if it has to. */
+@media (max-width:760px){
+  .tome{width:calc(100vw - 16px);max-width:600px;}
+  .spread{perspective:1300px;padding:8px 12px 18px;border-radius:4px}
+  .pg{max-height:calc(100dvh - 48px)}
+  .pl{padding:12px 9px 12px 10px}
+  .pl::before{box-shadow:0 1px 0 1px #E4D9C3,0 2px 0 2px #F7F1E4,0 3px 0 3px #CFC1A4,0 4px 0 4px #EDE5D2,0 5px 0 5px #BCAC8C,0 6px 1px 6px #9F8E6E,0 10px 12px 3px rgba(0,0,0,.45)}
+  .pr{padding:38px 10px 12px 11px}
+  .peek img{border-width:3px}
+  .peek .hint{gap:4px;margin-top:8px;font-size:10px;letter-spacing:.08em}
+  .pr .tag{gap:6px;margin-bottom:6px;font-size:9.5px;letter-spacing:.06em;line-height:1.3}
+  .pr .tag::before{flex:none;width:10px}
+  .pr h3{font-size:17px;margin-bottom:6px}
+  .pr p{font-size:12.5px;line-height:1.45}
+  .visit{font-size:13px}
+  .tclose{top:14px;right:18px;width:28px;height:28px;background:#ECE4D2}
+  .tclose:hover{background:#E2D8C3}
+  .tclose span::before,.tclose span::after{left:8px;right:8px;top:13px}
+  .cover{padding:12px;border-radius:0 4px 4px 0}
+  .cover span{font-size:17px;padding:8px 0}
+}
+/* Short screens (phones held sideways): tighter pages so the spread fits the height. */
+@media (min-width:761px) and (max-height:560px){
+  .pg{padding:16px 20px;max-height:calc(100dvh - 44px)}
+  .pr{padding-right:52px}
+  .pr h3{font-size:22px;margin-bottom:8px}
+  .pr p{font-size:14px;line-height:1.5}
+  .peek .hint{margin-top:8px}
 }
