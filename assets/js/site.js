@@ -160,7 +160,8 @@
     }
 
     // Step inside: the screenshot swells to fill the screen while the open book is pulled into it.
-    // The tab is already open by the time this runs; the book is put back to normal afterwards.
+    // The new tab opens when the dive ends (~650ms), still inside the browser's user-activation window.
+    var DIVE_MS = 650;
     function dive(dlg) {
       var link = dlg.querySelector('.peek'), img = link && link.querySelector('img'), spread = dlg.querySelector('.spread');
       if (!img || !canAnimate(dlg)) return null;
@@ -178,30 +179,22 @@
       ghost.style.cssText = 'left:' + from.left + ';top:' + from.top + ';width:' + from.width + ';height:' + from.height;
       dlg.classList.add('diving');
       dlg.appendChild(veil); dlg.appendChild(ghost);
-      var T = 1000, HOLD = 240, OUT = 380, anims = [], timers = [], done = false;
+      var T = DIVE_MS, anims = [], done = false;
       anims.push(spread.animate([
         { transformOrigin: origin, transform: 'none', filter: 'none', opacity: 1 },
         { transformOrigin: origin, transform: 'scale(1.03) rotate(.6deg)', filter: 'none', opacity: 1, offset: 0.15 },
         { transformOrigin: origin, transform: 'scale(.55) rotate(-12deg)', filter: 'blur(1px)', opacity: 1, offset: 0.7 },
         { transformOrigin: origin, transform: 'scale(.18) rotate(-24deg)', filter: 'blur(4px)', opacity: 0 }
-      ], { duration: T * 0.6, easing: 'cubic-bezier(.5,0,.75,0)', fill: 'forwards' }));
+      ], { duration: T * 0.7, easing: 'cubic-bezier(.5,0,.75,0)', fill: 'forwards' }));
       anims.push(veil.animate([{ opacity: 0 }, { opacity: 1, offset: 0.55 }, { opacity: 1 }], { duration: T, easing: 'ease-in', fill: 'forwards' }));
       anims.push(ghost.animate([
         { left: from.left, top: from.top, width: from.width, height: from.height, transform: 'none', boxShadow: '0 0 0 6px #FFFDF8, 0 30px 60px -20px rgba(0,0,0,.7)' },
-        { left: from.left, top: from.top, width: from.width, height: from.height, transform: 'scale(.92)', offset: 0.42 },
+        { left: from.left, top: from.top, width: from.width, height: from.height, transform: 'scale(.92)', offset: 0.38 },
         { left: '0px', top: '0px', width: vw + 'px', height: vh + 'px', transform: 'none', boxShadow: '0 0 0 0 #FFFDF8, 0 0 0 0 rgba(0,0,0,0)' }
       ], { duration: T, easing: 'cubic-bezier(.65,0,.25,1)', fill: 'forwards' }));
-      // Fade the full-screen site away to reveal the book again. Timers, not animation promises,
-      // because the page is usually in a background tab and may not render frames meanwhile.
-      timers.push(setTimeout(function () {
-        anims.forEach(function (x) { if (x.effect.target !== ghost) x.cancel(); });
-        anims.push(ghost.animate([{ opacity: 1 }, { opacity: 0 }], { duration: OUT, easing: 'ease-out', fill: 'forwards' }));
-      }, T + HOLD));
-      timers.push(setTimeout(clear, T + HOLD + OUT + 40));
       function clear() {
         if (done) return;
         done = true;
-        timers.forEach(clearTimeout);
         anims.forEach(function (x) { x.cancel(); });
         if (ghost.parentNode) ghost.parentNode.removeChild(ghost);
         if (veil.parentNode) veil.parentNode.removeChild(veil);
@@ -213,9 +206,10 @@
     books.forEach(function (spine) {
       var dlg = document.getElementById(spine.dataset.book);
       if (!dlg) return;
-      var running = [], closing = false, undive = null, lastPeek = 0;
+      var running = [], closing = false, undive = null, lastPeek = 0, peekTimer = 0;
       function stop() {
         running.forEach(function (x) { x.cancel(); }); running = [];
+        if (peekTimer) { clearTimeout(peekTimer); peekTimer = 0; }
         if (undive) { undive(); undive = null; }
       }
       function finish() { dlg.close(); }
@@ -237,18 +231,25 @@
         if (img && img.loading === 'lazy') img.loading = 'eager';
         if (canAnimate(dlg)) running = openAnim(dlg, spine);
       });
-      // Screenshot (click, tap or Enter): open the site in a new tab right away, then play the dive.
+      // Screenshot (click, tap or Enter): play the dive, then open the site when it ends.
+      // The open is scheduled from this click handler so it stays inside the user-activation window.
       var peek = dlg.querySelector('.peek');
       if (peek) peek.addEventListener('click', function (e) {
         if (e.button !== 0 || e.metaKey || e.ctrlKey || e.shiftKey || e.altKey) return; // let the browser handle modified clicks
-        if (closing || Date.now() - lastPeek < 900) { e.preventDefault(); return; } // no double tabs on a double click
-        var w = window.open(peek.href, '_blank');
-        if (!w) return; // blocked: fall back to the link's own target="_blank"
-        try { w.opener = null; } catch (err) {}
         e.preventDefault();
+        if (closing || Date.now() - lastPeek < 900) return; // no double tabs on a double click
         lastPeek = Date.now();
         stop();
+        function go() {
+          peekTimer = 0;
+          var w = window.open(peek.href, '_blank');
+          if (w) { try { w.opener = null; } catch (err) {} }
+          if (undive) { undive(); undive = null; }
+          if (!w) location.assign(peek.href); // blocked: continue in this tab after the animation
+        }
+        if (!canAnimate(dlg)) { go(); return; }
         undive = dive(dlg);
+        peekTimer = setTimeout(go, DIVE_MS);
       });
       dlg.addEventListener('cancel', function (e) { e.preventDefault(); shut(); });
       dlg.querySelector('.tclose').addEventListener('click', shut);
