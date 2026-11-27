@@ -654,27 +654,53 @@ main:has(> .band:last-child) + .ftr{border-top:0}
 .book.out{transform:translateY(-34px);opacity:.3;filter:none}
 .shelf-after{margin-top:0}
 
-/* The opened book (native modal dialog) */
-.tome{padding:0;border:0;background:transparent;color:var(--steel);width:min(1000px,calc(100vw - 48px));max-width:none;max-height:none;overflow:visible}
+/* The opened book (native modal dialog): a hardcover board in the book's color, two cream pages and a center gutter */
+.tome{--paper:#F7F2E6;--paper2:#EDE5D3;--edge:#D9CEB7;--ink:#2B2620;--ink2:#5C5245;--inkm:#7A6E5D;
+  padding:0;border:0;background:transparent;color:var(--ink2);width:min(1000px,calc(100vw - 48px));max-width:none;max-height:none;overflow:visible}
 .tome::backdrop{background:rgba(4,10,24,.8);-webkit-backdrop-filter:blur(4px);backdrop-filter:blur(4px)}
+.tome ::selection{background:#E8D9B0;color:var(--ink)}
+.tome :focus-visible{outline-color:#2456B8}
 html.tome-open{overflow:hidden}
-.spread{position:relative;display:grid;grid-template-columns:1fr 1fr;perspective:2200px;background:var(--panel);border:1px solid var(--line);box-shadow:0 40px 80px -30px rgba(0,0,0,.8)}
-.pg{position:relative;padding:clamp(18px,2.2vw,28px)}
-.pl{display:flex;align-items:center;background:#0B1530;box-shadow:inset -20px 0 26px -20px rgba(0,0,0,.7)}
-.pl img{width:100%;aspect-ratio:16/10;object-fit:cover;object-position:top;border:1px solid var(--line)}
-.pr{display:flex;flex-direction:column;justify-content:center;padding-right:clamp(44px,4vw,56px);box-shadow:inset 20px 0 26px -20px rgba(0,0,0,.6)}
-.pr .tag{display:flex;align-items:center;gap:10px;margin:0 0 10px;font-size:13px;font-weight:560;letter-spacing:.1em;text-transform:uppercase;color:var(--muted)}
-.pr .tag::before{content:"";width:18px;height:2px;background:var(--band)}
-.pr h3{margin-bottom:12px}
-.pr p{font-size:16.5px;line-height:1.55}
-.visit{align-self:flex-start;display:inline-flex;gap:6px;margin-top:4px;font-size:15px;font-weight:600;font-stretch:108%}
-.cover{position:absolute;top:0;bottom:0;left:50%;width:50%;z-index:2;transform-origin:left center;transform:rotateY(-180deg);backface-visibility:hidden;-webkit-backface-visibility:hidden;pointer-events:none;display:flex;align-items:center;justify-content:center;padding:28px;
+.spread{position:relative;display:grid;grid-template-columns:1fr 1fr;perspective:2200px;padding:12px 14px 16px;border-radius:5px;
+  background:linear-gradient(90deg,rgba(255,255,255,.06),rgba(0,0,0,0) 30%,rgba(0,0,0,0) 70%,rgba(255,255,255,.06)),var(--bk);
+  box-shadow:inset 0 0 0 1px rgba(255,255,255,.06),0 40px 80px -30px rgba(0,0,0,.85),0 12px 24px -12px rgba(0,0,0,.6)}
+.pg{position:relative;padding:clamp(20px,2.4vw,32px);background-color:var(--paper)}
+/* Gutter: each page darkens toward the spine and curls up slightly; stacked page edges show on the outer sides. */
+.pl{display:flex;flex-direction:column;justify-content:center;border-radius:3px 0 0 3px;
+  background-image:linear-gradient(90deg,rgba(255,255,255,.5),rgba(255,255,255,0) 6%,rgba(0,0,0,0) 82%,rgba(90,66,36,.08) 93%,rgba(70,50,28,.24) 100%),radial-gradient(120% 90% at 30% 40%,var(--paper),var(--paper2));
+  box-shadow:-1px 1px 0 var(--edge),-2px 2px 0 var(--paper),-3px 3px 0 var(--edge),-4px 4px 0 var(--paper2),-5px 5px 0 #CBBFA6,-6px 6px 10px -2px rgba(0,0,0,.35)}
+.pr{display:flex;flex-direction:column;justify-content:center;padding-right:clamp(48px,4.6vw,64px);border-radius:0 3px 3px 0;
+  background-image:linear-gradient(270deg,rgba(255,255,255,.5),rgba(255,255,255,0) 6%,rgba(0,0,0,0) 82%,rgba(90,66,36,.08) 93%,rgba(70,50,28,.26) 100%),radial-gradient(120% 90% at 70% 40%,var(--paper),var(--paper2));
+  box-shadow:1px 1px 0 var(--edge),2px 2px 0 var(--paper),3px 3px 0 var(--edge),4px 4px 0 var(--paper2),5px 5px 0 #CBBFA6,6px 6px 10px -2px rgba(0,0,0,.35)}
+/* The spine crease (part of the right page so it fades with the pages while the book is closed). */
+.pr::before{content:"";position:absolute;top:0;bottom:0;left:-1px;width:2px;background:linear-gradient(180deg,rgba(60,42,22,.12),rgba(60,42,22,.32) 50%,rgba(60,42,22,.12));pointer-events:none}
+.pr .tag{display:flex;align-items:center;gap:10px;margin:0 0 10px;font-size:13px;font-weight:560;letter-spacing:.1em;text-transform:uppercase;color:var(--inkm)}
+.pr .tag::before{content:"";width:18px;height:2px;background:var(--band);box-shadow:0 0 0 .5px rgba(43,38,32,.25)}
+.pr h3{margin-bottom:12px;color:var(--ink)}
+.pr p{font-size:16.5px;line-height:1.6;color:var(--ink2)}
+.visit{align-self:flex-start;display:inline-flex;gap:6px;margin-top:4px;font-size:15px;font-weight:600;font-stretch:108%;color:var(--ink);text-decoration-color:rgba(43,38,32,.4)}
+.visit:hover{text-decoration-color:var(--ink)}
+/* The screenshot is a plate tipped onto the left page; clicking it dives into the site. */
+.peek{position:relative;display:block;color:var(--ink);text-decoration:none;cursor:zoom-in;-webkit-tap-highlight-color:transparent}
+.peek img{display:block;width:100%;aspect-ratio:16/10;object-fit:cover;object-position:top;border:6px solid #FFFDF8;outline:1px solid rgba(60,45,25,.18);box-shadow:0 1px 2px rgba(60,45,25,.18),0 10px 22px -12px rgba(60,45,25,.5);transition:transform .3s cubic-bezier(.2,.7,.2,1),box-shadow .3s}
+.peek .hint{display:flex;align-items:center;justify-content:center;gap:6px;margin-top:12px;font-size:13px;font-weight:600;letter-spacing:.1em;text-transform:uppercase;color:var(--inkm);transition:color .2s}
+.peek:focus-visible{outline:2px solid #2456B8;outline-offset:4px}
+@media (hover:hover){
+  .peek:hover img{transform:translateY(-3px) rotate(-.4deg);box-shadow:0 1px 2px rgba(60,45,25,.18),0 18px 30px -14px rgba(60,45,25,.55)}
+  .peek:hover .hint{color:var(--ink)}
+}
+.cover{position:absolute;top:0;bottom:0;left:50%;width:50%;z-index:2;transform-origin:left center;transform:rotateY(-180deg);backface-visibility:hidden;-webkit-backface-visibility:hidden;pointer-events:none;display:flex;align-items:center;justify-content:center;padding:28px;border-radius:0 5px 5px 0;
   background:linear-gradient(90deg,rgba(0,0,0,.45),rgba(0,0,0,0) 7%),var(--bk)}
 .cover span{color:#EEF2F7;font-size:var(--s3);font-weight:640;font-stretch:112%;letter-spacing:-.01em;text-align:center;padding:14px 0;border-top:2px solid var(--band);border-bottom:2px solid var(--band)}
-.tclose{position:absolute;top:10px;right:10px;z-index:3;width:38px;height:38px;padding:0;border:0;background:rgba(238,242,247,.06);color:var(--ice);cursor:pointer;transition:background .2s}
-.tclose:hover{background:rgba(238,242,247,.14)}
+.tclose{position:absolute;top:22px;right:24px;z-index:3;width:38px;height:38px;padding:0;border:0;border-radius:50%;background:rgba(43,38,32,.06);color:var(--ink);cursor:pointer;transition:background .2s}
+.tclose:hover{background:rgba(43,38,32,.13)}
 .tclose span::before,.tclose span::after{content:"";position:absolute;left:11px;right:11px;top:18px;height:2px;background:currentColor;transform:rotate(45deg)}
 .tclose span::after{transform:rotate(-45deg)}
+/* Dive: a copy of the screenshot swells to fill the screen while the book is pulled into it. */
+.tome .dive{position:fixed;z-index:5;margin:0;object-fit:cover;object-position:top;pointer-events:none;background:#fff;box-shadow:0 0 0 6px #FFFDF8,0 30px 60px -20px rgba(0,0,0,.7)}
+.tome .veil{position:fixed;inset:0;z-index:4;pointer-events:none;background:radial-gradient(circle at var(--cx,50%) var(--cy,50%),rgba(4,10,24,.35),rgba(4,10,24,.96) 70%)}
+.tome.diving{overflow:hidden}
+.tome.diving .spread{will-change:transform,filter,opacity}
 
 @media (max-width:760px){
   .books{gap:5px;padding-top:22px;margin:0 calc(-1*var(--px));padding-left:var(--px);padding-right:var(--px);scroll-padding-left:var(--px)}
@@ -684,11 +710,13 @@ html.tome-open{overflow:hidden}
   .book::after{bottom:24px}
   .books::after{height:96px}
   .tome{width:100%;max-height:100dvh;margin:auto 0 0;overflow:auto;overscroll-behavior:contain}
-  .spread{grid-template-columns:1fr;border-width:1px 0 0}
-  .pl{padding:48px 16px 0;background:var(--panel);box-shadow:none}
-  .pr{padding:18px 16px 24px;box-shadow:none}
+  .spread{grid-template-columns:1fr;padding:10px 10px 0;border-radius:8px 8px 0 0}
+  .pl{padding:54px 18px 6px;border-radius:4px 4px 0 0;box-shadow:none;background-image:radial-gradient(120% 90% at 50% 30%,var(--paper),var(--paper2))}
+  .pr{padding:18px 18px 28px;border-radius:0;box-shadow:none;background-image:linear-gradient(180deg,rgba(70,50,28,.14),rgba(0,0,0,0) 14px),radial-gradient(120% 90% at 50% 60%,var(--paper),var(--paper2))}
+  .pr::before{display:none}
   .pr h3{font-size:22px}
   .pr p{font-size:16px}
-  .tclose{top:8px;right:8px;background:rgba(8,18,38,.82)}
+  .peek .hint{margin-top:10px}
+  .tclose{top:18px;right:18px;background:rgba(43,38,32,.08)}
   .cover{display:none}
 }

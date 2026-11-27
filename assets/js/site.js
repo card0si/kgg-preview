@@ -159,11 +159,65 @@
       return list;
     }
 
+    // Step inside: the screenshot swells to fill the screen while the open book is pulled into it.
+    // The tab is already open by the time this runs; the book is put back to normal afterwards.
+    function dive(dlg) {
+      var link = dlg.querySelector('.peek'), img = link && link.querySelector('img'), spread = dlg.querySelector('.spread');
+      if (!img || !canAnimate(dlg)) return null;
+      var r = img.getBoundingClientRect(), b = spread.getBoundingClientRect();
+      var vw = document.documentElement.clientWidth, vh = window.innerHeight;
+      var cx = r.left + r.width / 2, cy = r.top + r.height / 2;
+      var origin = (cx - b.left) + 'px ' + (cy - b.top) + 'px';
+      var ghost = document.createElement('img');
+      ghost.className = 'dive'; ghost.alt = ''; ghost.setAttribute('aria-hidden', 'true');
+      ghost.src = img.currentSrc || img.src;
+      var veil = document.createElement('div');
+      veil.className = 'veil'; veil.setAttribute('aria-hidden', 'true');
+      veil.style.setProperty('--cx', cx + 'px'); veil.style.setProperty('--cy', cy + 'px');
+      var from = { left: r.left + 'px', top: r.top + 'px', width: r.width + 'px', height: r.height + 'px' };
+      ghost.style.cssText = 'left:' + from.left + ';top:' + from.top + ';width:' + from.width + ';height:' + from.height;
+      dlg.classList.add('diving');
+      dlg.appendChild(veil); dlg.appendChild(ghost);
+      var T = 1000, HOLD = 240, OUT = 380, anims = [], timers = [], done = false;
+      anims.push(spread.animate([
+        { transformOrigin: origin, transform: 'none', filter: 'none', opacity: 1 },
+        { transformOrigin: origin, transform: 'scale(1.03) rotate(.6deg)', filter: 'none', opacity: 1, offset: 0.15 },
+        { transformOrigin: origin, transform: 'scale(.55) rotate(-12deg)', filter: 'blur(1px)', opacity: 1, offset: 0.7 },
+        { transformOrigin: origin, transform: 'scale(.18) rotate(-24deg)', filter: 'blur(4px)', opacity: 0 }
+      ], { duration: T * 0.6, easing: 'cubic-bezier(.5,0,.75,0)', fill: 'forwards' }));
+      anims.push(veil.animate([{ opacity: 0 }, { opacity: 1, offset: 0.55 }, { opacity: 1 }], { duration: T, easing: 'ease-in', fill: 'forwards' }));
+      anims.push(ghost.animate([
+        { left: from.left, top: from.top, width: from.width, height: from.height, transform: 'none', boxShadow: '0 0 0 6px #FFFDF8, 0 30px 60px -20px rgba(0,0,0,.7)' },
+        { left: from.left, top: from.top, width: from.width, height: from.height, transform: 'scale(.92)', offset: 0.42 },
+        { left: '0px', top: '0px', width: vw + 'px', height: vh + 'px', transform: 'none', boxShadow: '0 0 0 0 #FFFDF8, 0 0 0 0 rgba(0,0,0,0)' }
+      ], { duration: T, easing: 'cubic-bezier(.65,0,.25,1)', fill: 'forwards' }));
+      // Fade the full-screen site away to reveal the book again. Timers, not animation promises,
+      // because the page is usually in a background tab and may not render frames meanwhile.
+      timers.push(setTimeout(function () {
+        anims.forEach(function (x) { if (x.effect.target !== ghost) x.cancel(); });
+        anims.push(ghost.animate([{ opacity: 1 }, { opacity: 0 }], { duration: OUT, easing: 'ease-out', fill: 'forwards' }));
+      }, T + HOLD));
+      timers.push(setTimeout(clear, T + HOLD + OUT + 40));
+      function clear() {
+        if (done) return;
+        done = true;
+        timers.forEach(clearTimeout);
+        anims.forEach(function (x) { x.cancel(); });
+        if (ghost.parentNode) ghost.parentNode.removeChild(ghost);
+        if (veil.parentNode) veil.parentNode.removeChild(veil);
+        dlg.classList.remove('diving');
+      }
+      return clear;
+    }
+
     books.forEach(function (spine) {
       var dlg = document.getElementById(spine.dataset.book);
       if (!dlg) return;
-      var running = [], closing = false;
-      function stop() { running.forEach(function (x) { x.cancel(); }); running = []; }
+      var running = [], closing = false, undive = null, lastPeek = 0;
+      function stop() {
+        running.forEach(function (x) { x.cancel(); }); running = [];
+        if (undive) { undive(); undive = null; }
+      }
       function finish() { dlg.close(); }
       function shut() {
         if (closing || !dlg.open) return;
@@ -182,6 +236,19 @@
         var img = dlg.querySelector('img');
         if (img && img.loading === 'lazy') img.loading = 'eager';
         if (canAnimate(dlg)) running = openAnim(dlg, spine);
+      });
+      // Screenshot (click, tap or Enter): open the site in a new tab right away, then play the dive.
+      var peek = dlg.querySelector('.peek');
+      if (peek) peek.addEventListener('click', function (e) {
+        if (e.button !== 0 || e.metaKey || e.ctrlKey || e.shiftKey || e.altKey) return; // let the browser handle modified clicks
+        if (closing || Date.now() - lastPeek < 900) { e.preventDefault(); return; } // no double tabs on a double click
+        var w = window.open(peek.href, '_blank');
+        if (!w) return; // blocked: fall back to the link's own target="_blank"
+        try { w.opener = null; } catch (err) {}
+        e.preventDefault();
+        lastPeek = Date.now();
+        stop();
+        undive = dive(dlg);
       });
       dlg.addEventListener('cancel', function (e) { e.preventDefault(); shut(); });
       dlg.querySelector('.tclose').addEventListener('click', shut);
