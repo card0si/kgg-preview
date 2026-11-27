@@ -119,6 +119,93 @@
     if (/\/thanks\/?$/.test(location.pathname)) window.gtag('event', 'generate_lead');
   }
 
+  // Work bookshelf: a spine pulls out and opens into a two-page spread (native modal dialog).
+  var books = document.querySelectorAll('.book[data-book]');
+  if (books.length && typeof HTMLDialogElement === 'function') {
+    var still = window.matchMedia('(prefers-reduced-motion: reduce)');
+    var narrow = window.matchMedia('(max-width: 760px)');
+    var EASE = 'cubic-bezier(.2,.7,.2,1)';
+    function canAnimate(el) { return !still.matches && typeof el.animate === 'function'; }
+
+    function openAnim(dlg, spine) {
+      var spread = dlg.querySelector('.spread'), cover = dlg.querySelector('.cover');
+      var fade = dlg.querySelectorAll('.pl, .pr, .tclose');
+      if (narrow.matches) {
+        return [spread.animate([{ transform: 'translateY(48px)', opacity: 0 }, { transform: 'none', opacity: 1 }], { duration: 360, easing: EASE })];
+      }
+      // Start as a closed book sitting where the spine is, grow to full size, then swing the cover open.
+      var a = spine.getBoundingClientRect(), b = spread.getBoundingClientRect();
+      var s = Math.max(0.15, a.height / b.height);
+      var tx = (a.left + a.width / 2) - (b.left + b.width / 2) - s * b.width / 4;
+      var ty = (a.top + a.height / 2) - (b.top + b.height / 2);
+      var T = 920, mid = 0.42, list = [];
+      list.push(spread.animate([
+        { transform: 'translate(' + tx + 'px,' + ty + 'px) scale(' + s + ')', opacity: 0.4 },
+        { transform: 'translateX(-25%)', opacity: 1, offset: mid },
+        { transform: 'none' }
+      ], { duration: T, easing: EASE }));
+      // Hide the open spread's frame while the book is still closed.
+      list.push(spread.animate([
+        { background: 'transparent', borderColor: 'transparent', boxShadow: 'none' },
+        { background: 'transparent', borderColor: 'transparent', boxShadow: 'none', offset: mid + 0.1 },
+        {}
+      ], { duration: T }));
+      list.push(cover.animate([
+        { transform: 'rotateY(0deg)' }, { transform: 'rotateY(0deg)', offset: mid }, { transform: 'rotateY(-180deg)' }
+      ], { duration: T, easing: 'ease-in-out' }));
+      fade.forEach(function (el) {
+        list.push(el.animate([{ opacity: 0 }, { opacity: 0, offset: mid + 0.12 }, { opacity: 1 }], { duration: T }));
+      });
+      return list;
+    }
+
+    books.forEach(function (spine) {
+      var dlg = document.getElementById(spine.dataset.book);
+      if (!dlg) return;
+      var running = [], closing = false;
+      function stop() { running.forEach(function (x) { x.cancel(); }); running = []; }
+      function finish() { dlg.close(); }
+      function shut() {
+        if (closing || !dlg.open) return;
+        closing = true;
+        stop();
+        if (!canAnimate(dlg)) { finish(); return; }
+        running = openAnim(dlg, spine).map(function (x) { x.effect.updateTiming({ fill: 'both' }); x.playbackRate = narrow.matches ? 1.4 : 1.6; x.reverse(); return x; });
+        running[0].finished.then(finish, function () {});
+      }
+      spine.addEventListener('click', function () {
+        if (dlg.open) return;
+        closing = false;
+        spine.classList.add('out');
+        document.documentElement.classList.add('tome-open');
+        dlg.showModal();
+        var img = dlg.querySelector('img');
+        if (img && img.loading === 'lazy') img.loading = 'eager';
+        if (canAnimate(dlg)) running = openAnim(dlg, spine);
+      });
+      dlg.addEventListener('cancel', function (e) { e.preventDefault(); shut(); });
+      dlg.querySelector('.tclose').addEventListener('click', shut);
+      // A click on the backdrop lands on the dialog element itself.
+      dlg.addEventListener('click', function (e) { if (e.target === dlg) shut(); });
+      dlg.addEventListener('close', function () {
+        stop(); closing = false;
+        spine.classList.remove('out');
+        document.documentElement.classList.remove('tome-open');
+        spine.focus();
+      });
+    });
+    // Warm the screenshots once the shelf is near, so books open on a loaded page.
+    if ('IntersectionObserver' in window) {
+      var shelf = document.querySelector('.shelf');
+      var io = new IntersectionObserver(function (en) {
+        if (!en[0].isIntersecting) return;
+        io.disconnect();
+        document.querySelectorAll('.tome img').forEach(function (i) { var w = new Image(); w.src = i.currentSrc || i.src; });
+      }, { rootMargin: '400px' });
+      io.observe(shelf);
+    }
+  }
+
   var y = document.querySelector('[data-year]');
   if (y) y.textContent = new Date().getFullYear();
 })();

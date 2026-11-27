@@ -630,3 +630,65 @@ main:has(> .band:last-child) + .ftr{border-top:0}
 }
 @media (max-width:760px){.ftr .fcontact{grid-column:1/-1}}
 @media (max-width:760px){.fgrid{grid-template-columns:minmax(0,1fr) minmax(0,1fr)}}
+
+/* ---------- Work: bookshelf of sites we've built ---------- */
+.shelf{position:relative;margin-bottom:clamp(24px,3vw,40px)}
+.books{list-style:none;margin:0;padding:20px 2px 0;display:flex;align-items:flex-end;gap:6px;overflow-x:auto;overscroll-behavior-x:contain;scroll-snap-type:x proximity;scrollbar-width:none;-webkit-overflow-scrolling:touch}
+.books::-webkit-scrollbar{display:none}
+.books li{flex:none;scroll-snap-align:start}
+.shelf::after{content:"";display:block;height:10px;background:linear-gradient(180deg,#1C2C4E,#0C1834);border-top:1px solid rgba(200,208,220,.22);box-shadow:0 16px 28px -14px rgba(0,0,0,.75)}
+.book{position:relative;display:flex;flex-direction:column;align-items:center;width:var(--bw,80px);height:var(--bh,290px);padding:14px 0 16px;margin:0;border:0;border-radius:3px 3px 0 0;cursor:pointer;font:inherit;color:#EEF2F7;
+  background:linear-gradient(90deg,rgba(0,0,0,.38),rgba(0,0,0,0) 16%,rgba(255,255,255,.07) 46%,rgba(0,0,0,0) 80%,rgba(0,0,0,.4)),linear-gradient(180deg,var(--bk2,var(--bk)),var(--bk));
+  box-shadow:inset 0 1px 0 rgba(255,255,255,.08),0 0 0 1px rgba(0,0,0,.25);
+  transition:transform .32s cubic-bezier(.2,.7,.2,1),box-shadow .32s,filter .32s,opacity .32s}
+.book::before,.book::after{content:"";position:absolute;left:0;right:0;height:2px;background:var(--band);box-shadow:0 6px 0 var(--band);opacity:.9}
+.book::before{top:42px}
+.book::after{bottom:30px}
+.book .bn{font-size:11px;font-weight:600;font-stretch:112%;letter-spacing:.14em;color:var(--band)}
+.book .bt{writing-mode:vertical-rl;margin:auto 0;white-space:nowrap;font-size:13.5px;font-weight:640;font-stretch:112%;letter-spacing:.08em;text-transform:uppercase}
+.books::after{content:"";flex:none;width:10px;height:118px;margin-left:3px;border-radius:2px 2px 0 0;background:linear-gradient(90deg,#2A3A5E,#1A2847);box-shadow:inset 0 1px 0 rgba(255,255,255,.1)}
+@media (hover:hover){
+  .book:hover{transform:translateY(-12px);filter:brightness(1.18);box-shadow:inset 0 1px 0 rgba(255,255,255,.14),0 0 0 1px var(--band),0 18px 30px -16px rgba(0,0,0,.8)}
+}
+.book:focus-visible{outline:2px solid var(--signal);outline-offset:3px;transform:translateY(-12px);filter:brightness(1.18)}
+.book.out{transform:translateY(-34px);opacity:.3;filter:none}
+.shelf-after{margin-top:0}
+
+/* The opened book (native modal dialog) */
+.tome{padding:0;border:0;background:transparent;color:var(--steel);width:min(1000px,calc(100vw - 48px));max-width:none;max-height:none;overflow:visible}
+.tome::backdrop{background:rgba(4,10,24,.8);-webkit-backdrop-filter:blur(4px);backdrop-filter:blur(4px)}
+html.tome-open{overflow:hidden}
+.spread{position:relative;display:grid;grid-template-columns:1fr 1fr;perspective:2200px;background:var(--panel);border:1px solid var(--line);box-shadow:0 40px 80px -30px rgba(0,0,0,.8)}
+.pg{position:relative;padding:clamp(18px,2.2vw,28px)}
+.pl{display:flex;align-items:center;background:#0B1530;box-shadow:inset -20px 0 26px -20px rgba(0,0,0,.7)}
+.pl img{width:100%;aspect-ratio:16/10;object-fit:cover;object-position:top;border:1px solid var(--line)}
+.pr{display:flex;flex-direction:column;justify-content:center;padding-right:clamp(44px,4vw,56px);box-shadow:inset 20px 0 26px -20px rgba(0,0,0,.6)}
+.pr .tag{display:flex;align-items:center;gap:10px;margin:0 0 10px;font-size:13px;font-weight:560;letter-spacing:.1em;text-transform:uppercase;color:var(--muted)}
+.pr .tag::before{content:"";width:18px;height:2px;background:var(--band)}
+.pr h3{margin-bottom:12px}
+.pr p{font-size:16.5px;line-height:1.55}
+.visit{align-self:flex-start;display:inline-flex;gap:6px;margin-top:4px;font-size:15px;font-weight:600;font-stretch:108%}
+.cover{position:absolute;top:0;bottom:0;left:50%;width:50%;z-index:2;transform-origin:left center;transform:rotateY(-180deg);backface-visibility:hidden;-webkit-backface-visibility:hidden;pointer-events:none;display:flex;align-items:center;justify-content:center;padding:28px;
+  background:linear-gradient(90deg,rgba(0,0,0,.45),rgba(0,0,0,0) 7%),var(--bk)}
+.cover span{color:#EEF2F7;font-size:var(--s3);font-weight:640;font-stretch:112%;letter-spacing:-.01em;text-align:center;padding:14px 0;border-top:2px solid var(--band);border-bottom:2px solid var(--band)}
+.tclose{position:absolute;top:10px;right:10px;z-index:3;width:38px;height:38px;padding:0;border:0;background:rgba(238,242,247,.06);color:var(--ice);cursor:pointer;transition:background .2s}
+.tclose:hover{background:rgba(238,242,247,.14)}
+.tclose span::before,.tclose span::after{content:"";position:absolute;left:11px;right:11px;top:18px;height:2px;background:currentColor;transform:rotate(45deg)}
+.tclose span::after{transform:rotate(-45deg)}
+
+@media (max-width:760px){
+  .books{gap:5px;padding-top:22px;margin:0 calc(-1*var(--px));padding-left:var(--px);padding-right:var(--px);scroll-padding-left:var(--px)}
+  .book{width:calc(var(--bw,80px)*.84);height:calc(var(--bh,290px)*.86)}
+  .book .bt{font-size:12px;letter-spacing:.06em}
+  .book::before{top:38px}
+  .book::after{bottom:24px}
+  .books::after{height:96px}
+  .tome{width:100%;max-height:100dvh;margin:auto 0 0;overflow:auto;overscroll-behavior:contain}
+  .spread{grid-template-columns:1fr;border-width:1px 0 0}
+  .pl{padding:48px 16px 0;background:var(--panel);box-shadow:none}
+  .pr{padding:18px 16px 24px;box-shadow:none}
+  .pr h3{font-size:22px}
+  .pr p{font-size:16px}
+  .tclose{top:8px;right:8px;background:rgba(8,18,38,.82)}
+  .cover{display:none}
+}
